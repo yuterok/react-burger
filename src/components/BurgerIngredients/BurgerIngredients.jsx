@@ -4,18 +4,20 @@ import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components
 import { Counter } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Typography } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./BurgerIngredients.module.css";
-import ingredientsData from "../../utils/data.json";
+import ingredientsData from "../../utils/data";
+import PropTypes from 'prop-types';
 
 const IngredientItem = ({ ingredient }) => {
   return (
-    <div className={styles.ingredient_block + " pl-4"}>
+    <li className={styles.ingredient_block + " pl-4"}>
+      {ingredient._id !== "60666c42cc7b410027a1a9b2" ? <Counter count={1} size="default" extraClass="m-1" /> : ''}
       <img src={ingredient.image} alt={ingredient.name} />
       <span className={styles.item_price}>
         <p className="text text_type_digits-default">{ingredient.price}</p>{" "}
         <CurrencyIcon type="primary" />
       </span>
       <p className="text text_type_main-default">{ingredient.name}</p>
-    </div>
+    </li>
   );
 };
 
@@ -31,29 +33,40 @@ const IngredientsList = ({ type }) => {
   );
 
   return (
-    <div className={styles.ingredients_list}>
+    <ul className={styles.ingredients_list}>
       {filteredIngredients.map((ingredient) => (
         <IngredientItem key={ingredient._id} ingredient={ingredient} />
       ))}
-    </div>
+    </ul>
   );
 };
 
 const TabIngredients = () => {
   const [current, setCurrent] = React.useState("one");
+  const handleTabClick = (value) => {
+    setCurrent(value);
+    document.getElementById(value).scrollIntoView({ behavior: "smooth" });
+  };
   return (
     <div style={{ display: "flex" }}>
-      <Tab href="bun" value="bun" active={current === "bun"} onClick={setCurrent}>
-        <a className={styles.tab_link} href="#bun">Булки</a>
+      <Tab href="bun" value="bun" active={current === "bun"} onClick={handleTabClick}>Булки
       </Tab>
-      <Tab value="sauce" active={current === "sauce"} onClick={setCurrent}>
-        <a className={styles.tab_link} href="#sauce">Соусы</a>
+      <Tab value="sauce" active={current === "sauce"} onClick={handleTabClick}>Соусы
       </Tab>
-      <Tab value="main" active={current === "main"} onClick={setCurrent}>
-        <a className={styles.tab_link} href="#main">Начинки</a>
+      <Tab value="main" active={current === "main"} onClick={handleTabClick}>Начинки
       </Tab>
     </div>
   );
+};
+
+IngredientItem.propTypes = {
+  ingredient: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+  }).isRequired,
 };
 
 const BurgerIngredients = () => {
@@ -61,7 +74,7 @@ const BurgerIngredients = () => {
     <div className={styles.container}>
       <p className="text text_type_main-large pt-10 pb-5">Соберите бургер</p>
       <TabIngredients />
-      <div className={styles.ingredients_container + " mt-10"}>
+      <div className={styles.ingredients_container + " mt-10 + custom-scroll"}>
         <p id="bun" className="text text_type_main-medium">
           Булки
         </p>

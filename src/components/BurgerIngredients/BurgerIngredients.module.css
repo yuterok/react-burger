@@ -1,8 +1,6 @@
 
 .container{
     max-width: 600px;
-    /* border: 1px solid var(--interface-accent); */
-    margin-top: -1px
 }
 .ingredients_list{
     display: grid;
@@ -15,10 +13,12 @@
     margin-bottom: 0;
 }
 .ingredient_block{
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 5px;
+    text-align: center;
 }
 
 .item_price{
@@ -31,17 +31,10 @@
 }
 
 .ingredients_container{
-    max-height: 68vh;
+    max-height: 64vh;
     overflow-y: scroll;
 }
 
 .tab:focus-visible{
     outline: none;
-}
-.tab_link{
-    color: var(--dark-gray-secondary-text);
-    text-decoration: none;
-}
-.tab_type_current.tab_link{
-    color: var(--primary-light-standart-text);
 }

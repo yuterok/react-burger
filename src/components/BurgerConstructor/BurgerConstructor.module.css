@@ -1,0 +1,49 @@
+.container{
+    max-width: 600px;
+    /* border: 1px solid var(--interface-accent); */
+}
+.cart_container{
+    max-height: 64vh;
+    overflow-y: scroll;
+}
+.ingredient_item svg{
+    width: 24px;
+    height: 24px;
+}
+.ingredient_item{
+    display: flex;
+    gap: 5px;
+    justify-content: space-between;
+    align-items: center;
+}
+.ingredient_container{
+    border-radius: 40px;
+    background-color: var(--modal-bg);
+    display: grid;
+    grid-template-columns: 80px 250px 91px 24px;
+    gap: 20px;
+    justify-content: space-between;
+    align-items: center;
+}
+.ingredient_container img{
+    height: 40px;
+}
+.item_price{
+    display: flex;
+    gap: 7px;
+    justify-content: end;
+}
+.total{
+    display: flex;
+    gap: 48px;
+    justify-content: flex-end;
+}
+.total_price{
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+.total_price svg{
+    height: 36px;
+    width: 36px;
+}
