@@ -1,0 +1,10 @@
+.ingredients_list{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.ingredients_list:last-child{
+    margin-bottom: 0;
+}

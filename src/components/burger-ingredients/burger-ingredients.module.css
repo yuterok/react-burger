@@ -1,0 +1,13 @@
+
+.container{
+    max-width: 600px;
+}
+
+.ingredients_container{
+    max-height: 64vh;
+    overflow-y: scroll;
+}
+
+.tab:focus-visible{
+    outline: none;
+}

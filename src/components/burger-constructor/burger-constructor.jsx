@@ -9,7 +9,7 @@ import React, { useEffect, useState } from "react";
 import { Typography } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Box } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
-import styles from "./BurgerConstructor.module.css";
+import styles from "./burger-constructor.module.css";
 import ingredientsData from "../../utils/data";
 import PropTypes from "prop-types";
 

@@ -4,7 +4,7 @@ import {
   BurgerIcon,
   ProfileIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import styles from "./AppHeader.module.css";
+import styles from "./app-header.module.css";
 
 const NavLink = ({ link, text, Icon }) => {
   return (
