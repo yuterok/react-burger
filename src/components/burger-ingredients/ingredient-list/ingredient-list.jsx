@@ -4,7 +4,7 @@ import IngredientItem from '../ingredient-item/ingredient-item';
 import styles from "./ingredient-list.module.css";
 
 
-const IngredientsList = ({ type }) => {
+const IngredientsList = ({ text, type }) => {
   const [ingredients, setIngredients] = useState([]);
 
   useEffect(() => {
@@ -16,11 +16,14 @@ const IngredientsList = ({ type }) => {
   );
 
   return (
+    <>
+    <p text="Булки" id="bun" className="text text_type_main-medium">{text}</p>
     <ul className={styles.ingredients_list}>
       {filteredIngredients.map((ingredient) => (
         <IngredientItem key={ingredient._id} ingredient={ingredient} />
       ))}
     </ul>
+    </>
   );
 };
 

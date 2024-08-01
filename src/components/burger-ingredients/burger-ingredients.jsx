@@ -29,18 +29,9 @@ const BurgerIngredients = () => {
       <p className="text text_type_main-large pt-10 pb-5">Соберите бургер</p>
       <TabIngredients />
       <div className={styles.ingredients_container + " mt-10 + custom-scroll"}>
-        <p id="bun" className="text text_type_main-medium">
-          Булки
-        </p>
-        <IngredientsList type="bun"></IngredientsList>
-        <p id="sauce" className="text text_type_main-medium">
-          Соусы
-        </p>
-        <IngredientsList type="sauce"></IngredientsList>
-        <p id="main" className="text text_type_main-medium">
-          Начинка
-        </p>
-        <IngredientsList type="main"></IngredientsList>
+        <IngredientsList text="Булки" type="bun"></IngredientsList>
+        <IngredientsList text="Соусы" type="sauce"></IngredientsList>
+        <IngredientsList text="Начинка" type="main"></IngredientsList>
       </div>
     </div>
   );
