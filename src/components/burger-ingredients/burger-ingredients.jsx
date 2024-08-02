@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from "react";
 import { Tab, Typography} from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./burger-ingredients.module.css";
 
-import IngredientItem from './ingredient-item/ingredient-item'
 import IngredientsList from './ingredient-list/ingredient-list'
 
 const TabIngredients = () => {
@@ -25,15 +24,16 @@ const TabIngredients = () => {
   );
 };
 
-const BurgerIngredients = () => {
+const BurgerIngredients = ({ ingredients }) => {
+
   return (
     <div className={styles.container}>
       <p className="text text_type_main-large pt-10 pb-5">Соберите бургер</p>
       <TabIngredients />
       <div className={styles.ingredients_container + " mt-10 + custom-scroll"}>
-        <IngredientsList text="Булки" type="bun"></IngredientsList>
-        <IngredientsList text="Соусы" type="sauce"></IngredientsList>
-        <IngredientsList text="Начинка" type="main"></IngredientsList>
+        <IngredientsList ingredients={ingredients} text="Булки" type="bun"></IngredientsList>
+        <IngredientsList ingredients={ingredients} text="Соусы" type="sauce"></IngredientsList>
+        <IngredientsList ingredients={ingredients} text="Начинка" type="main"></IngredientsList>
       </div>
     </div>
   );

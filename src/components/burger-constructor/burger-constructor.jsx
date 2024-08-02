@@ -10,20 +10,21 @@ import { Typography } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Box } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./burger-constructor.module.css";
-import ingredientsData from "../../utils/data";
 import PropTypes from "prop-types";
 
-const Cart = () => {
-  const filteredIngredients =
-    ingredientsData.length > 0
-      ? ingredientsData.filter(
+const Cart = ({ingredients}) => {
+
+  if (!Array.isArray(ingredients) || ingredients.length === 0) {
+    return null;
+  };
+
+  const filteredIngredients = ingredients.filter(
           (ingredient) =>
             ingredient.type == "sauce" || ingredient.type == "main"
         )
-      : [];
 
-  filteredIngredients.push(ingredientsData[0]);
-  filteredIngredients.unshift(ingredientsData[0]);
+  filteredIngredients.push(ingredients[0]); // чтобы сверху и снизу была одна булка
+  filteredIngredients.unshift(ingredients[0]);
 
   return (
     <ul
@@ -36,7 +37,7 @@ const Cart = () => {
   );
 };
 
-const IngredientItem = ({ ingredient }) => {
+const IngredientItem = ({ key, ingredient }) => {
   return (
     <li className={styles.ingredient_item + " pt-4 pb-4"}>
       {ingredient.type !== "bun" ? <DragIcon type="primary" /> : <div></div>}
@@ -81,10 +82,11 @@ const Total = (props) => {
     </div>
   );
 };
-const BurgerConstructor = () => {
+
+const BurgerConstructor = ({ingredients}) => {
   return (
     <div className={styles.container}>
-      <Cart />
+      <Cart ingredients={ingredients}/>
       <Total price="610" />
     </div>
   );

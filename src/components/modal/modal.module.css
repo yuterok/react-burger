@@ -1,0 +1,36 @@
+
+
+.content{
+
+    padding: 40px 40px 60px 40px;
+    border-radius: 20px;
+    background-color: var(--modal-bg);
+    transform: scale(0);
+    transition: 0.4s;
+}
+
+.active{
+    transform: scale(1);
+}
+
+.modal_wrapper{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.content svg{
+    position: absolute;
+    top: 50px;
+    right: 0;
+    margin-right: 40px;
+}
+.content button{
+border: none;
+cursor: pointer;
+}
