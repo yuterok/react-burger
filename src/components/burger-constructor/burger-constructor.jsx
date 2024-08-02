@@ -14,7 +14,6 @@ import ingredientsData from "../../utils/data";
 import PropTypes from "prop-types";
 
 const Cart = () => {
-  console.log(ingredientsData);
   const filteredIngredients =
     ingredientsData.length > 0
       ? ingredientsData.filter(
@@ -25,7 +24,6 @@ const Cart = () => {
 
   filteredIngredients.push(ingredientsData[0]);
   filteredIngredients.unshift(ingredientsData[0]);
-  console.log(filteredIngredients);
 
   return (
     <ul
