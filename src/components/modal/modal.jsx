@@ -27,7 +27,6 @@ const Modal = ({ active, setActive, children }) => {
     const close = (e) => {
       if (e.keyCode === 27) {
         setActive(false);
-        console.log("key pressed", active);
       }
     };
     window.addEventListener("keydown", close);
@@ -36,19 +35,13 @@ const Modal = ({ active, setActive, children }) => {
   }, [active]);
 
   let handleClick = (e) => {
-    console.log("Overlay clicked", active);
     e.stopPropagation();
     setActive(false);
-    console.log("Modal should be inactive now", active);
   };
 
   return createPortal(
     <>
-      <div
-        className={
-          active ? `${styles.content} ${styles.active}` : styles.content
-        }
-      >
+      <div className={styles.content}>
         <button onClick={handleClick}>
           <CloseIcon type="primary" />
         </button>

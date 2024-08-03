@@ -7,7 +7,6 @@
 }
 
 .header {
-    /* border: 2px solid var(--interface-accent); */
     background-color: var(--modal-bg);
     display: flex;
     align-items: center;
@@ -18,12 +17,13 @@
     display: flex;
     gap: 8px;
     align-items: center;
-    /* border: 1px solid var(--interface-accent); */
-    color: var(--primary-light-standart-text);
+    color: var(--dark-gray-secondary-text);
     text-decoration: none;
     border-radius: 40px;
 }
-
+.nav_link svg{
+    fill: var(--dark-gray-secondary-text);
+}
 .nav_section {
     display: flex;
     gap: 8px;
@@ -31,4 +31,11 @@
 }
 .nav_section:last-child{
     justify-content: flex-end;
+}
+
+.nav_link.active{
+    color: var(--primary-light-standart-text);
+}
+.nav_link.active svg{
+    fill: var(--primary-light-standart-text);
 }

@@ -11,25 +11,23 @@ import { Box } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./burger-constructor.module.css";
 import PropTypes from "prop-types";
+import Modal from "../modal/modal";
+import OrderDetails from './order-details/order-details'
 
-const Cart = ({ingredients}) => {
-
+const Cart = ({ ingredients }) => {
   if (!Array.isArray(ingredients) || ingredients.length === 0) {
     return null;
-  };
+  }
 
   const filteredIngredients = ingredients.filter(
-          (ingredient) =>
-            ingredient.type == "sauce" || ingredient.type == "main"
-        )
+    (ingredient) => ingredient.type == "sauce" || ingredient.type == "main"
+  );
 
   filteredIngredients.push(ingredients[0]); // чтобы сверху и снизу была одна булка
   filteredIngredients.unshift(ingredients[0]);
 
   return (
-    <ul
-      className={styles.cart_container + " mt-25 mb-10 + custom-scroll"}
-    >
+    <ul className={styles.cart_container + " mt-25 mb-10 + custom-scroll"}>
       {filteredIngredients.map((ingredient) => (
         <IngredientItem key={ingredient._id} ingredient={ingredient} />
       ))}
@@ -69,6 +67,7 @@ IngredientItem.propTypes = {
 };
 
 const Total = (props) => {
+  const [orderModalActive, setOrderModalActive] = useState(false);
   return (
     <div className={styles.total}>
       <div className={styles.total_price}>
@@ -76,17 +75,26 @@ const Total = (props) => {
         <CurrencyIcon type="primary" />
       </div>
 
-      <Button htmlType="button" type="primary" size="medium" extraClass="ml-2">
+      <Button
+        onClick={() => setOrderModalActive(true)}
+        htmlType="button"
+        type="primary"
+        size="medium"
+        extraClass="ml-2"
+      >
         Оформить заказ
       </Button>
+      <Modal active={orderModalActive} setActive={setOrderModalActive}>
+        <OrderDetails />
+      </Modal>
     </div>
   );
 };
 
-const BurgerConstructor = ({ingredients}) => {
+const BurgerConstructor = ({ ingredients }) => {
   return (
     <div className={styles.container}>
-      <Cart ingredients={ingredients}/>
+      <Cart ingredients={ingredients} />
       <Total price="610" />
     </div>
   );
