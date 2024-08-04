@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 
-import "./App.css";
-import AppHeader from "./components/app-header/app-header";
-import BurgerIngredients from "./components/burger-ingredients/burger-ingredients";
-import BurgerConstructor from "./components/burger-constructor/burger-constructor";
+import styles from "./app.module.css";
+import AppHeader from "../app-header/app-header";
+import BurgerIngredients from "../burger-ingredients/burger-ingredients";
+import BurgerConstructor from "../burger-constructor/burger-constructor";
 
 const apiLink = "https://norma.nomoreparties.space/api/ingredients";
 
@@ -21,7 +21,6 @@ function App() {
 
         const data = await response.json();
         setIngredients(data.data);
-        console.log("Работает!! Данные: ", data);
       } catch (error) {
         console.error("Ошибка fetch ", error);
       }
@@ -31,13 +30,13 @@ function App() {
   }, [apiLink]);
 
   return (
-    <div className="App">
+    <main className={styles.app}>
       <AppHeader />
-      <div className="container">
+      <div className={styles.container}>
         <BurgerIngredients ingredients={ingredientsData} />
         <BurgerConstructor ingredients={ingredientsData} />
       </div>
-    </div>
+    </main>
   );
 }
 

@@ -1,18 +1,17 @@
-import {
-  DragIcon,
-  CurrencyIcon,
-  LockIcon,
-  DeleteIcon,
-} from "@ya.praktikum/react-developer-burger-ui-components";
 import React, { useEffect, useState } from "react";
 
-import { Typography } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Box } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
+import {
+  CurrencyIcon,
+  ConstructorElement,
+  Typography,
+  Box,
+  Button,
+} from "@ya.praktikum/react-developer-burger-ui-components";
+
 import styles from "./burger-constructor.module.css";
-import PropTypes from "prop-types";
+import IngredientType from "../../utils/types";
 import Modal from "../modal/modal";
-import OrderDetails from './order-details/order-details'
+import OrderDetails from "./order-details/order-details";
 
 const Cart = ({ ingredients }) => {
   if (!Array.isArray(ingredients) || ingredients.length === 0) {
@@ -23,51 +22,51 @@ const Cart = ({ ingredients }) => {
     (ingredient) => ingredient.type == "sauce" || ingredient.type == "main"
   );
 
-  filteredIngredients.push(ingredients[0]); // чтобы сверху и снизу была одна булка
-  filteredIngredients.unshift(ingredients[0]);
+  const selectedBun = ingredients[0];
 
   return (
-    <ul className={styles.cart_container + " mt-25 mb-10 + custom-scroll"}>
-      {filteredIngredients.map((ingredient) => (
-        <IngredientItem key={ingredient._id} ingredient={ingredient} />
-      ))}
-    </ul>
+    <div className={styles.cart_container + " mt-25 mb-10"}>
+      <ConstructorElement
+        type="top"
+        isLocked={true}
+        text={selectedBun.name + " (верх)"}
+        price={selectedBun.price}
+        thumbnail={selectedBun.image}
+      />
+      <ul className={styles.cart_container_inner + " mb-4 custom-scroll"}>
+        {filteredIngredients.map((ingredient) => (
+          <CartIngredientItem key={ingredient._id} ingredient={ingredient} />
+        ))}
+      </ul>
+      <ConstructorElement
+        type="bottom"
+        isLocked={true}
+        text={selectedBun.name + " (низ)"}
+        price={selectedBun.price}
+        thumbnail={selectedBun.image}
+      />
+    </div>
   );
 };
 
-const IngredientItem = ({ key, ingredient }) => {
+const CartIngredientItem = ({ ingredient }) => {
   return (
-    <li className={styles.ingredient_item + " pt-4 pb-4"}>
-      {ingredient.type !== "bun" ? <DragIcon type="primary" /> : <div></div>}
-      <div className={styles.ingredient_container + " pl-6 pt-4 pb-4 pr-8"}>
-        <img src={ingredient.image} alt={ingredient.name} />
-        <p className="text text_type_main-default">{ingredient.name}</p>
-        <span className={styles.item_price}>
-          <p className="text text_type_digits-default">{ingredient.price}</p>{" "}
-          <CurrencyIcon type="primary" />
-        </span>
-        {ingredient.type == "bun" ? (
-          <LockIcon type="primary" />
-        ) : (
-          <DeleteIcon type="primary" />
-        )}
-      </div>
-    </li>
+    <ConstructorElement
+      text={ingredient.name}
+      price={ingredient.price}
+      thumbnail={ingredient.image}
+    />
   );
 };
 
-IngredientItem.propTypes = {
-  ingredient: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-    image: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-  }).isRequired,
-};
+CartIngredientItem.propTypes = IngredientType;
 
 const Total = (props) => {
   const [orderModalActive, setOrderModalActive] = useState(false);
+
+  const openModal = () => setOrderModalActive(true);
+  const closeModal = () => setOrderModalActive(false);
+
   return (
     <div className={styles.total}>
       <div className={styles.total_price}>
@@ -76,7 +75,7 @@ const Total = (props) => {
       </div>
 
       <Button
-        onClick={() => setOrderModalActive(true)}
+        onClick={openModal}
         htmlType="button"
         type="primary"
         size="medium"
@@ -84,9 +83,11 @@ const Total = (props) => {
       >
         Оформить заказ
       </Button>
-      <Modal active={orderModalActive} setActive={setOrderModalActive}>
-        <OrderDetails />
-      </Modal>
+      {orderModalActive && (
+        <Modal onClose={closeModal}>
+          <OrderDetails />
+        </Modal>
+      )}
     </div>
   );
 };
@@ -101,5 +102,3 @@ const BurgerConstructor = ({ ingredients }) => {
 };
 
 export default BurgerConstructor;
-
-// не забыть делать проверку propTypes

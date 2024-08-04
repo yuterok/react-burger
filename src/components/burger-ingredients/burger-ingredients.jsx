@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useState } from "react";
 import {
   Tab,
   Typography,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import styles from "./burger-ingredients.module.css";
 
+import styles from "./burger-ingredients.module.css";
 import IngredientsList from "./ingredient-list/ingredient-list";
 
 const TabIngredients = () => {
@@ -16,7 +16,7 @@ const TabIngredients = () => {
   };
 
   return (
-    <div style={{ display: "flex" }}>
+    <div className={styles.tabs}>
       <Tab
         id="bun"
         value="bun"
@@ -46,27 +46,18 @@ const TabIngredients = () => {
 };
 
 const BurgerIngredients = ({ ingredients }) => {
-
-
-
   return (
     <div className={styles.container}>
       <p className="text text_type_main-large pt-10 pb-5">Соберите бургер</p>
       <TabIngredients />
       <div className={styles.ingredients_container + " mt-10 + custom-scroll"}>
+        <IngredientsList ingredients={ingredients} type="bun"></IngredientsList>
         <IngredientsList
           ingredients={ingredients}
-          text="Булки"
-          type="bun"
-        ></IngredientsList>
-        <IngredientsList
-          ingredients={ingredients}
-          text="Соусы"
           type="sauce"
         ></IngredientsList>
         <IngredientsList
           ingredients={ingredients}
-          text="Начинка"
           type="main"
         ></IngredientsList>
       </div>
@@ -75,5 +66,3 @@ const BurgerIngredients = ({ ingredients }) => {
 };
 
 export default BurgerIngredients;
-
-

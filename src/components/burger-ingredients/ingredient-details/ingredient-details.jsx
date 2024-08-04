@@ -1,14 +1,15 @@
 import styles from "./ingredient-details.module.css";
-import { Box, CloseIcon} from "@ya.praktikum/react-developer-burger-ui-components";
+import { Typography } from "@ya.praktikum/react-developer-burger-ui-components";
+import IngredientType from "../../../utils/types";
 
-const IngredientDetails = ({ingredient}) => {
+const IngredientDetails = ({ ingredient }) => {
   return (
     <div className={styles.container}>
-      <h2 className={styles.title + " text text_type_main-large"}>Детали ингредиента</h2>
+      <h2 className={styles.title + " text text_type_main-large"}>
+        Детали ингредиента
+      </h2>
       <img src={ingredient.image_large} alt="" />
-      <p className="text text_type_main-medium">
-        {ingredient.name}
-      </p>
+      <p className="text text_type_main-medium">{ingredient.name}</p>
       <div className={styles.ingredient_info}>
         <div className={styles.ingredient_info_item}>
           <p className="text text_type_main-default">Калории,ккал</p>
@@ -24,22 +25,15 @@ const IngredientDetails = ({ingredient}) => {
         </div>
         <div className={styles.ingredient_info_item}>
           <p className="text text_type_main-default">Углеводы, г</p>
-          <p className="text text_type_digits-default">{ingredient.carbohydrates}</p>
+          <p className="text text_type_digits-default">
+            {ingredient.carbohydrates}
+          </p>
         </div>
       </div>
     </div>
   );
 };
 
-export default IngredientDetails;
+IngredientDetails.propTypes = IngredientType;
 
-// const Modal = ({title, onClose, children}) => {
-//     return createPortal(
-//         <div>
-//             {/* header */}
-//             <div className={styles.content}>{children}</div>
-//             <ModalOverlay onClose={onClose} />
-//        </div>,
-//       modalRoot
-//     );
-// }
+export default IngredientDetails;

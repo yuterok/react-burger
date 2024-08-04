@@ -11,3 +11,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root{
+  --interface-accent: #4C4CFF;
+  --interface-bg: #131316;
+  --primary-light-standart-text: #F2F2F3;
+  --modal-bg: #1C1C21;
+  --dark-gray-secondary-text: #8585AD;
+}

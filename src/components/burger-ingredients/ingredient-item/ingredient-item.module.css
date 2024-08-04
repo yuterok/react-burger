@@ -1,18 +1,18 @@
-.ingredient_block{
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    text-align: center;
-    cursor: pointer;
+.ingredient_block {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  text-align: center;
+  cursor: pointer;
 }
 
-.item_price{
-    display: flex;
-    gap: 8px;
+.item_price {
+  display: flex;
+  gap: 8px;
 }
 
-.ingredient_block img{
-    height: 120px;
+.ingredient_block img {
+  height: 120px;
 }

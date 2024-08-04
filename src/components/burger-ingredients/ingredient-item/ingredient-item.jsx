@@ -1,21 +1,23 @@
+import { useState } from "react";
+
 import {
   Counter,
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useState } from "react";
+
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import Modal from "../../modal/modal";
-import PropTypes from "prop-types";
+import IngredientType from "../../../utils/types";
 import styles from "./ingredient-item.module.css";
 
 const IngredientItem = ({ ingredient }) => {
   const [modalActive, setModalActive] = useState(false);
 
+  const openModal = () => setModalActive(true);
+  const closeModal = () => setModalActive(false);
+
   return (
-    <li
-      className={styles.ingredient_block + " pl-4"}
-      onClick={() => setModalActive(true)}
-    >
+    <li className={styles.ingredient_block + " pl-4"} onClick={openModal}>
       {ingredient._id !== "60666c42cc7b410027a1a9b2" ? (
         <Counter count={1} size="default" extraClass="m-1" />
       ) : (
@@ -27,21 +29,15 @@ const IngredientItem = ({ ingredient }) => {
         <CurrencyIcon type="primary" />
       </span>
       <p className="text text_type_main-default">{ingredient.name}</p>
-      <Modal active={modalActive} setActive={setModalActive}>
-        <IngredientDetails ingredient={ingredient} />
-      </Modal>
+      {modalActive && (
+        <Modal onClose={closeModal}>
+          <IngredientDetails ingredient={ingredient} />
+        </Modal>
+      )}
     </li>
   );
 };
 
-IngredientItem.propTypes = {
-  ingredient: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-    image: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-  }).isRequired,
-};
+IngredientItem.propTypes = IngredientType;
 
 export default IngredientItem;
