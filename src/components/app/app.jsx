@@ -30,13 +30,13 @@ function App() {
   }, [apiLink]);
 
   return (
-    <main className={styles.app}>
+    <div className={styles.app}>
       <AppHeader />
-      <div className={styles.container}>
+      <main className={styles.container}>
         <BurgerIngredients ingredients={ingredientsData} />
         <BurgerConstructor ingredients={ingredientsData} />
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }
 

@@ -12,6 +12,7 @@ import styles from "./burger-constructor.module.css";
 import IngredientType from "../../utils/types";
 import Modal from "../modal/modal";
 import OrderDetails from "./order-details/order-details";
+import { useModal } from "../../hooks/useModal";
 
 const Cart = ({ ingredients }) => {
   if (!Array.isArray(ingredients) || ingredients.length === 0) {
@@ -62,10 +63,7 @@ const CartIngredientItem = ({ ingredient }) => {
 CartIngredientItem.propTypes = IngredientType;
 
 const Total = (props) => {
-  const [orderModalActive, setOrderModalActive] = useState(false);
-
-  const openModal = () => setOrderModalActive(true);
-  const closeModal = () => setOrderModalActive(false);
+  const { isModalOpen, openModal, closeModal } = useModal();
 
   return (
     <div className={styles.total}>
@@ -83,7 +81,7 @@ const Total = (props) => {
       >
         Оформить заказ
       </Button>
-      {orderModalActive && (
+      {isModalOpen && (
         <Modal onClose={closeModal}>
           <OrderDetails />
         </Modal>

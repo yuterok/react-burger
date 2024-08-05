@@ -8,7 +8,7 @@ const IngredientDetails = ({ ingredient }) => {
       <h2 className={styles.title + " text text_type_main-large"}>
         Детали ингредиента
       </h2>
-      <img src={ingredient.image_large} alt="" />
+      <img src={ingredient.image_large} alt={ingredient.name} />
       <p className="text text_type_main-medium">{ingredient.name}</p>
       <div className={styles.ingredient_info}>
         <div className={styles.ingredient_info_item}>

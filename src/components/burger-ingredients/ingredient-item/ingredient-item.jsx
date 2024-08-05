@@ -9,12 +9,10 @@ import IngredientDetails from "../ingredient-details/ingredient-details";
 import Modal from "../../modal/modal";
 import IngredientType from "../../../utils/types";
 import styles from "./ingredient-item.module.css";
+import { useModal } from "../../../hooks/useModal";
 
 const IngredientItem = ({ ingredient }) => {
-  const [modalActive, setModalActive] = useState(false);
-
-  const openModal = () => setModalActive(true);
-  const closeModal = () => setModalActive(false);
+  const { isModalOpen, openModal, closeModal } = useModal();
 
   return (
     <li className={styles.ingredient_block + " pl-4"} onClick={openModal}>
@@ -29,7 +27,7 @@ const IngredientItem = ({ ingredient }) => {
         <CurrencyIcon type="primary" />
       </span>
       <p className="text text_type_main-default">{ingredient.name}</p>
-      {modalActive && (
+      {isModalOpen && (
         <Modal onClose={closeModal}>
           <IngredientDetails ingredient={ingredient} />
         </Modal>
