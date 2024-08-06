@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { IngredientType } from "../../utils/types";
+import PropTypes from "prop-types";
 import {
   Tab,
   Typography,
@@ -63,6 +65,10 @@ const BurgerIngredients = ({ ingredients }) => {
       </div>
     </div>
   );
+};
+
+BurgerIngredients.propTypes = {
+  ingredients: PropTypes.arrayOf(PropTypes.shape(IngredientType)).isRequired,
 };
 
 export default BurgerIngredients;

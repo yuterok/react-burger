@@ -7,7 +7,8 @@ import {
 
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import Modal from "../../modal/modal";
-import IngredientType from "../../../utils/types";
+import { IngredientType } from "../../../utils/types";
+import PropTypes from "prop-types";
 import styles from "./ingredient-item.module.css";
 import { useModal } from "../../../hooks/useModal";
 
@@ -36,6 +37,8 @@ const IngredientItem = ({ ingredient }) => {
   );
 };
 
-IngredientItem.propTypes = IngredientType;
+IngredientItem.propTypes = {
+  ingredient: PropTypes.shape(IngredientType).isRequired,
+};
 
 export default IngredientItem;

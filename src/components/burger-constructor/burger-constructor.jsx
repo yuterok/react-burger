@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 
 import {
   CurrencyIcon,
@@ -6,10 +6,11 @@ import {
   Typography,
   Box,
   Button,
+  DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import styles from "./burger-constructor.module.css";
-import IngredientType from "../../utils/types";
+import { IngredientType } from "../../utils/types";
 import Modal from "../modal/modal";
 import OrderDetails from "./order-details/order-details";
 import { useModal } from "../../hooks/useModal";
@@ -33,6 +34,7 @@ const Cart = ({ ingredients }) => {
         text={selectedBun.name + " (верх)"}
         price={selectedBun.price}
         thumbnail={selectedBun.image}
+        extraClass="ml-8"
       />
       <ul className={styles.cart_container_inner + " mb-4 custom-scroll"}>
         {filteredIngredients.map((ingredient) => (
@@ -45,22 +47,32 @@ const Cart = ({ ingredients }) => {
         text={selectedBun.name + " (низ)"}
         price={selectedBun.price}
         thumbnail={selectedBun.image}
+        extraClass="ml-8"
       />
     </div>
   );
 };
 
+Cart.propTypes = {
+  ingredients: PropTypes.arrayOf(PropTypes.shape(IngredientType)).isRequired,
+};
+
 const CartIngredientItem = ({ ingredient }) => {
   return (
-    <ConstructorElement
-      text={ingredient.name}
-      price={ingredient.price}
-      thumbnail={ingredient.image}
-    />
+    <div className={styles.CartIngredientItem}>
+      <DragIcon type="primary" />
+      <ConstructorElement
+        text={ingredient.name}
+        price={ingredient.price}
+        thumbnail={ingredient.image}
+      />
+    </div>
   );
 };
 
-CartIngredientItem.propTypes = IngredientType;
+CartIngredientItem.propTypes = {
+  ingredient: IngredientType,
+};
 
 const Total = (props) => {
   const { isModalOpen, openModal, closeModal } = useModal();
@@ -90,6 +102,10 @@ const Total = (props) => {
   );
 };
 
+Total.propTypes = {
+  price: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+};
+
 const BurgerConstructor = ({ ingredients }) => {
   return (
     <div className={styles.container}>
@@ -97,6 +113,10 @@ const BurgerConstructor = ({ ingredients }) => {
       <Total price="610" />
     </div>
   );
+};
+
+BurgerConstructor.propTypes = {
+  ingredients: PropTypes.arrayOf(PropTypes.shape(IngredientType)).isRequired,
 };
 
 export default BurgerConstructor;

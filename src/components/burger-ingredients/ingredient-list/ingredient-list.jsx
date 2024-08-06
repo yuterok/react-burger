@@ -1,4 +1,6 @@
 import IngredientItem from "../ingredient-item/ingredient-item";
+import { IngredientType } from "../../../utils/types";
+import PropTypes from "prop-types";
 import styles from "./ingredient-list.module.css";
 
 const IngredientsList = ({ type, ingredients }) => {
@@ -24,6 +26,11 @@ const IngredientsList = ({ type, ingredients }) => {
       </ul>
     </div>
   );
+};
+
+IngredientsList.propTypes = {
+  type: PropTypes.string.isRequired,
+  ingredients: PropTypes.arrayOf(PropTypes.shape(IngredientType)).isRequired,
 };
 
 export default IngredientsList;
