@@ -4,38 +4,37 @@ import styles from "./app.module.css";
 import AppHeader from "../app-header/app-header";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchIngredients } from "../../services/ingredients/actions";
 
-const apiLink = "https://norma.nomoreparties.space/api/ingredients";
+export const apiLink = "https://norma.nomoreparties.space/api/ingredients";
 
 function App() {
-  const [ingredientsData, setIngredients] = useState([]);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(apiLink);
-
-        if (!response.ok) {
-          throw new Error(response.status);
-        }
-
-        const data = await response.json();
-        setIngredients(data.data);
-      } catch (error) {
-        console.error("Ошибка fetch ", error);
-      }
-    };
-
-    fetchData();
+    dispatch(fetchIngredients());
   }, [apiLink]);
+
+  const { items, itemsRequest, itemsFailed } = useSelector(
+    (state) => state.ingredients
+  );
 
   return (
     <div className={styles.app}>
       <AppHeader />
-      <main className={styles.container}>
-        <BurgerIngredients ingredients={ingredientsData} />
-        <BurgerConstructor ingredients={ingredientsData} />
-      </main>
+
+      {itemsRequest ? (
+        <h1 className={`${styles.warning} text text_type_main-large mt-10`}>Загрузка...</h1>
+      ) : itemsFailed ? (
+        <h1 className={`${styles.warning} text text_type_main-large mt-10`}>Ошибка загрузки данных с сервера</h1>
+      ) : (
+        <main className={styles.container}>
+          <BurgerIngredients ingredients={items} />
+          <BurgerConstructor ingredients={items} />
+        </main>
+      )}
     </div>
   );
 }
