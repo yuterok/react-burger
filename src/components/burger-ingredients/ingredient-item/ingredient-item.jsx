@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import {
   Counter,
@@ -12,11 +12,30 @@ import PropTypes from "prop-types";
 import styles from "./ingredient-item.module.css";
 import { useModal } from "../../../hooks/useModal";
 
+import {
+  setCurrentIngredient,
+  clearCurrentIngredient,
+} from "../../../services/currentIngredient/actions";
+
 const IngredientItem = ({ ingredient }) => {
   const { isModalOpen, openModal, closeModal } = useModal();
 
+  const dispatch = useDispatch();
+
+  const { currentIngredient } = useSelector((state) => state.currentIngredient);
+
+  const setCurrentItem = () => {
+    dispatch(setCurrentIngredient(ingredient));
+    openModal();
+  };
+
+  const clearCurrentItem = () => {
+    dispatch(clearCurrentIngredient());
+    closeModal();
+  };
+
   return (
-    <li className={styles.ingredient_block + " pl-4"} onClick={openModal}>
+    <li className={styles.ingredient_block + " pl-4"} onClick={setCurrentItem}>
       {ingredient._id !== "60666c42cc7b410027a1a9b2" ? (
         <Counter count={1} size="default" extraClass="m-1" />
       ) : (
@@ -29,8 +48,8 @@ const IngredientItem = ({ ingredient }) => {
       </span>
       <p className="text text_type_main-default">{ingredient.name}</p>
       {isModalOpen && (
-        <Modal onClose={closeModal}>
-          <IngredientDetails ingredient={ingredient} />
+        <Modal onClose={clearCurrentItem}>
+          <IngredientDetails ingredient={currentIngredient} />
         </Modal>
       )}
     </li>

@@ -21,6 +21,8 @@ function App() {
     (state) => state.ingredients
   );
 
+
+
   return (
     <div className={styles.app}>
       <AppHeader />
