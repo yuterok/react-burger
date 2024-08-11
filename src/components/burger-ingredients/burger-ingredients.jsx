@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { IngredientType } from "../../utils/types";
-import PropTypes from "prop-types";
+import { useState, useEffect } from "react";
+import { useRef } from "react";
+
 import {
   Tab,
   Typography,
@@ -9,20 +9,17 @@ import {
 import styles from "./burger-ingredients.module.css";
 import IngredientsList from "./ingredient-list/ingredient-list";
 
-const TabIngredients = () => {
-  const [current, setCurrent] = useState("bun");
-
+const TabIngredients = ({ currentTab, setCurrentTab }) => {
   const handleTabClick = (value) => {
-    setCurrent(value);
+    setCurrentTab(value);
     document.getElementById(value).scrollIntoView({ behavior: "smooth" });
   };
-
   return (
     <div className={styles.tabs}>
       <Tab
         id="bun"
         value="bun"
-        active={current === "bun"}
+        active={currentTab === "bun"}
         onClick={handleTabClick}
       >
         Булки
@@ -30,7 +27,7 @@ const TabIngredients = () => {
       <Tab
         id="sauce"
         value="sauce"
-        active={current === "sauce"}
+        active={currentTab === "sauce"}
         onClick={handleTabClick}
       >
         Соусы
@@ -38,7 +35,7 @@ const TabIngredients = () => {
       <Tab
         id="main"
         value="main"
-        active={current === "main"}
+        active={currentTab === "main"}
         onClick={handleTabClick}
       >
         Начинки
@@ -47,28 +44,58 @@ const TabIngredients = () => {
   );
 };
 
-const BurgerIngredients = ({ ingredients }) => {
+const BurgerIngredients = () => {
+  const [currentTab, setCurrentTab] = useState("bun");
+
+  const bunRef = useRef(null);
+  const sauceRef = useRef(null);
+  const mainRef = useRef(null);
+
+  const handleScroll = () => {
+    const bunPosition = bunRef.current.getBoundingClientRect().top;
+    const saucePosition = sauceRef.current.getBoundingClientRect().top;
+    const mainPosition = mainRef.current.getBoundingClientRect().top;
+
+    const offset = 300;
+
+    if (bunPosition < offset && saucePosition > offset) {
+      setCurrentTab("bun");
+    } else if (saucePosition < offset && mainPosition > offset) {
+      setCurrentTab("sauce");
+    } else if (mainPosition < offset) {
+      setCurrentTab("main");
+    }
+  };
+
+  useEffect(() => {
+    const container = document.getElementById("ingredients-container");
+    container.addEventListener("scroll", handleScroll);
+
+    return () => {
+      container.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <div className={styles.container}>
       <p className="text text_type_main-large pt-10 pb-5">Соберите бургер</p>
-      <TabIngredients />
-      <div className={styles.ingredients_container + " mt-10 + custom-scroll"}>
-        <IngredientsList ingredients={ingredients} type="bun"></IngredientsList>
-        <IngredientsList
-          ingredients={ingredients}
-          type="sauce"
-        ></IngredientsList>
-        <IngredientsList
-          ingredients={ingredients}
-          type="main"
-        ></IngredientsList>
+      <TabIngredients currentTab={currentTab} setCurrentTab={setCurrentTab} />
+      <div
+        id="ingredients-container"
+        className={styles.ingredients_container + " mt-10 + custom-scroll"}
+      >
+        <div ref={bunRef} id="bun">
+          <IngredientsList type="bun" />
+        </div>
+        <div ref={sauceRef} id="sauce">
+          <IngredientsList type="sauce" />
+        </div>
+        <div ref={mainRef} id="main">
+          <IngredientsList type="main" />
+        </div>
       </div>
     </div>
   );
-};
-
-BurgerIngredients.propTypes = {
-  ingredients: PropTypes.arrayOf(PropTypes.shape(IngredientType)).isRequired,
 };
 
 export default BurgerIngredients;

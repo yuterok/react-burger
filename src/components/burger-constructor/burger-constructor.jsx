@@ -14,17 +14,22 @@ import { IngredientType } from "../../utils/types";
 import Modal from "../modal/modal";
 import OrderDetails from "./order-details/order-details";
 import { useModal } from "../../hooks/useModal";
+import { useSelector } from "react-redux";
 
-const Cart = ({ ingredients }) => {
-  if (!Array.isArray(ingredients) || ingredients.length === 0) {
+const Cart = () => {
+  const { items } = useSelector((state) => state.ingredients);
+
+  const { cart } = useSelector((state) => state.cart);
+
+  if (!Array.isArray(items) || items.length === 0) {
     return null;
   }
 
-  const filteredIngredients = ingredients.filter(
+  const filtered = items.filter(
     (ingredient) => ingredient.type == "sauce" || ingredient.type == "main"
   );
 
-  const selectedBun = ingredients[0];
+  const selectedBun = items[0];
 
   return (
     <div className={styles.cart_container + " mt-25 mb-10"}>
@@ -37,7 +42,7 @@ const Cart = ({ ingredients }) => {
         extraClass="ml-8"
       />
       <ul className={styles.cart_container_inner + " mb-4 custom-scroll"}>
-        {filteredIngredients.map((ingredient) => (
+        {cart.map((ingredient) => (
           <CartIngredientItem key={ingredient._id} ingredient={ingredient} />
         ))}
       </ul>
@@ -53,9 +58,9 @@ const Cart = ({ ingredients }) => {
   );
 };
 
-Cart.propTypes = {
-  ingredients: PropTypes.arrayOf(PropTypes.shape(IngredientType)).isRequired,
-};
+// Cart.propTypes = {
+//   ingredients: PropTypes.arrayOf(PropTypes.shape(IngredientType)).isRequired,
+// };
 
 const CartIngredientItem = ({ ingredient }) => {
   return (
@@ -115,8 +120,8 @@ const BurgerConstructor = ({ ingredients }) => {
   );
 };
 
-BurgerConstructor.propTypes = {
-  ingredients: PropTypes.arrayOf(PropTypes.shape(IngredientType)).isRequired,
-};
+// BurgerConstructor.propTypes = {
+//   ingredients: PropTypes.arrayOf(PropTypes.shape(IngredientType)).isRequired,
+// };
 
 export default BurgerConstructor;

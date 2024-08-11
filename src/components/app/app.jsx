@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import styles from "./app.module.css";
 import AppHeader from "../app-header/app-header";
@@ -10,7 +10,6 @@ import { fetchIngredients } from "../../services/ingredients/actions";
 export const apiLink = "https://norma.nomoreparties.space/api/ingredients";
 
 function App() {
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -21,20 +20,22 @@ function App() {
     (state) => state.ingredients
   );
 
-
-
   return (
     <div className={styles.app}>
       <AppHeader />
 
       {itemsRequest ? (
-        <h1 className={`${styles.warning} text text_type_main-large mt-10`}>Загрузка...</h1>
+        <h1 className={`${styles.warning} text text_type_main-large mt-10`}>
+          Загрузка...
+        </h1>
       ) : itemsFailed ? (
-        <h1 className={`${styles.warning} text text_type_main-large mt-10`}>Ошибка загрузки данных с сервера</h1>
+        <h1 className={`${styles.warning} text text_type_main-large mt-10`}>
+          Ошибка загрузки данных с сервера
+        </h1>
       ) : (
         <main className={styles.container}>
-          <BurgerIngredients ingredients={items} />
-          <BurgerConstructor ingredients={items} />
+          <BurgerIngredients />
+          <BurgerConstructor />
         </main>
       )}
     </div>
