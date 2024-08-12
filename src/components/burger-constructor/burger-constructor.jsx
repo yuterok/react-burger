@@ -1,4 +1,8 @@
 import PropTypes from "prop-types";
+import { useModal } from "../../hooks/useModal";
+import { useDrop } from "react-dnd";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteIngredient } from "../../services/cart/actions";
 
 import {
   CurrencyIcon,
@@ -13,45 +17,46 @@ import styles from "./burger-constructor.module.css";
 import { IngredientType } from "../../utils/types";
 import Modal from "../modal/modal";
 import OrderDetails from "./order-details/order-details";
-import { useModal } from "../../hooks/useModal";
-import { useSelector } from "react-redux";
 
 const Cart = () => {
-  const { items } = useSelector((state) => state.ingredients);
+  const { cart, bun } = useSelector((state) => state.cart);
 
-  const { cart } = useSelector((state) => state.cart);
+  const [, dropRef] = useDrop({
+    accept: ["bun", "ingredient"],
+    drop: (item) => ({ name: "BurgerConstructor" }),
+  });
 
-  if (!Array.isArray(items) || items.length === 0) {
-    return null;
-  }
+  const dispatch = useDispatch();
 
-  const filtered = items.filter(
-    (ingredient) => ingredient.type == "sauce" || ingredient.type == "main"
-  );
-
-  const selectedBun = items[0];
+  const handleDeleteIngredient = (ingredientId) => {
+    dispatch(deleteIngredient(ingredientId));
+  };
 
   return (
-    <div className={styles.cart_container + " mt-25 mb-10"}>
+    <div ref={dropRef} className={styles.cart_container + " mt-25 mb-10"}>
       <ConstructorElement
         type="top"
         isLocked={true}
-        text={selectedBun.name + " (верх)"}
-        price={selectedBun.price}
-        thumbnail={selectedBun.image}
+        text={bun.name + " (верх)"}
+        price={bun.price}
+        thumbnail={bun.image}
         extraClass="ml-8"
       />
       <ul className={styles.cart_container_inner + " mb-4 custom-scroll"}>
         {cart.map((ingredient) => (
-          <CartIngredientItem key={ingredient._id} ingredient={ingredient} />
+          <CartIngredientItem
+            handleClose={handleDeleteIngredient}
+            key={ingredient._id}
+            ingredient={ingredient}
+          />
         ))}
       </ul>
       <ConstructorElement
         type="bottom"
         isLocked={true}
-        text={selectedBun.name + " (низ)"}
-        price={selectedBun.price}
-        thumbnail={selectedBun.image}
+        text={bun.name + " (низ)"}
+        price={bun.price}
+        thumbnail={bun.image}
         extraClass="ml-8"
       />
     </div>
@@ -62,7 +67,7 @@ const Cart = () => {
 //   ingredients: PropTypes.arrayOf(PropTypes.shape(IngredientType)).isRequired,
 // };
 
-const CartIngredientItem = ({ ingredient }) => {
+const CartIngredientItem = ({ ingredient, handleClose }) => {
   return (
     <div className={styles.CartIngredientItem}>
       <DragIcon type="primary" />
@@ -70,6 +75,7 @@ const CartIngredientItem = ({ ingredient }) => {
         text={ingredient.name}
         price={ingredient.price}
         thumbnail={ingredient.image}
+        handleClose={() => handleClose(ingredient._id)}
       />
     </div>
   );
@@ -79,13 +85,24 @@ CartIngredientItem.propTypes = {
   ingredient: IngredientType,
 };
 
-const Total = (props) => {
+const Total = () => {
+  const { cart, bun } = useSelector((state) => state.cart);
+
+  const price = () => {
+    let sum = 0;
+    cart.forEach((item) => {
+      sum += item.price * item.count;
+    });
+    sum += bun.price * 2;
+    return sum;
+  };
+
   const { isModalOpen, openModal, closeModal } = useModal();
 
   return (
     <div className={styles.total}>
       <div className={styles.total_price}>
-        <p className="text text_type_digits-medium">{props.price}</p>
+        <p className="text text_type_digits-medium">{price()}</p>
         <CurrencyIcon type="primary" />
       </div>
 
@@ -107,15 +124,11 @@ const Total = (props) => {
   );
 };
 
-Total.propTypes = {
-  price: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-};
-
 const BurgerConstructor = ({ ingredients }) => {
   return (
     <div className={styles.container}>
       <Cart ingredients={ingredients} />
-      <Total price="610" />
+      <Total />
     </div>
   );
 };
