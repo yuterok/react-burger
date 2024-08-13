@@ -37,7 +37,11 @@ const IngredientItem = ({ ingredient }) => {
         }
       }
     },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
   });
+  const opacity = isDragging ? 0.5 : 1;
 
   const setCurrentItem = () => {
     dispatch(setCurrentIngredient(ingredient));
@@ -51,23 +55,35 @@ const IngredientItem = ({ ingredient }) => {
 
   const { cart } = useSelector((state) => state.cart);
 
-  const existingItem = cart.find((item) => item._id === ingredient._id);
+  const countIngredients = (ingredient) => {
+    let count = 0;
+    if (cart.find((item) => item._id === ingredient._id)) {
+      cart.forEach((item) => {
+        if (item._id == ingredient._id) {
+          count += 1;
+        }
+      });
+    }
+    return count;
+  };
+
   return (
     <li
       ref={dragRef}
       className={styles.ingredient_block + " pl-4"}
       onClick={setCurrentItem}
+      style={{ opacity: opacity }}
     >
-      {existingItem ? (
-        <Counter count={existingItem.count} size="default" extraClass="m-1" />
+      {countIngredients(ingredient) > 0 ? (
+        <Counter
+          count={countIngredients(ingredient)}
+          size="default"
+          extraClass="m-1"
+        />
       ) : (
         ""
       )}
-      {/* {ingredient._id !== "60666c42cc7b410027a1a9b2" ? (
-        <Counter count={2} size="default" extraClass="m-1" />
-      ) : (
-        ""
-      )} */}
+
       <img src={ingredient.image} alt={ingredient.name} />
       <span className={styles.item_price}>
         <p className="text text_type_digits-default">{ingredient.price}</p>{" "}

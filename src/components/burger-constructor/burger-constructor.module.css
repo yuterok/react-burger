@@ -58,8 +58,15 @@
   width: 36px;
 }
 
-.CartIngredientItem {
+.cart_ingredient_item {
   display: flex;
   align-items: center;
   gap: 7px;
+}
+
+.cart_ingredient_item_inner {
+  cursor: pointer;
+}
+.cart_ingredient_item_inner:hover {
+  opacity: 0.8;
 }

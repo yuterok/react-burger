@@ -1,4 +1,9 @@
-import { ADD_INGREDIENT, DELETE_INGREDIENT, REPLACE_BUN } from "./actions";
+import {
+  ADD_INGREDIENT,
+  DELETE_INGREDIENT,
+  REPLACE_BUN,
+  MOVE_INGREDIENT,
+} from "./actions";
 
 const initialState = {
   cart: [],
@@ -21,45 +26,15 @@ const initialState = {
 export const cartReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_INGREDIENT: {
-      const existingIngredient = state.cart.find(
-        (item) => item._id === action.payload._id
-      );
-
-      if (existingIngredient) {
-        return {
-          ...state,
-          cart: state.cart.map((item) =>
-            item._id === action.payload._id
-              ? { ...item, count: item.count + 1 }
-              : item
-          ),
-        };
-      }
-
       return {
         ...state,
-        cart: [...state.cart, { ...action.payload, count: 1 }],
+        cart: [...state.cart, { ...action.payload }],
       };
     }
     case DELETE_INGREDIENT: {
-      const existingIngredient = state.cart.find(
-        (item) => item._id === action.payload
-      );
-
-      if (existingIngredient && existingIngredient.count > 1) {
-        return {
-          ...state,
-          cart: state.cart.map((item) =>
-            item._id === action.payload
-              ? { ...item, count: item.count - 1 }
-              : item
-          ),
-        };
-      }
-
       return {
         ...state,
-        cart: state.cart.filter((item) => item._id !== action.payload),
+        cart: state.cart.filter((item) => item.key !== action.payload),
       };
     }
     case REPLACE_BUN: {
@@ -68,7 +43,16 @@ export const cartReducer = (state = initialState, action) => {
         bun: action.payload,
       };
     }
+    case MOVE_INGREDIENT: {
+      const { dragIndex, dropIndex } = action.payload;
+      const newCart = [...state.cart];
+      newCart.splice(dragIndex, 0, newCart.splice(dropIndex, 1)[0]);
 
+      return {
+        ...state,
+        cart: newCart,
+      };
+    }
     default: {
       return state;
     }

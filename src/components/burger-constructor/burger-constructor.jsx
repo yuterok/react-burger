@@ -1,9 +1,9 @@
-import PropTypes from "prop-types";
 import { useModal } from "../../hooks/useModal";
-import { useDrop } from "react-dnd";
+import PropTypes from "prop-types";
+import { useDrop, useDrag } from "react-dnd";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { deleteIngredient } from "../../services/cart/actions";
+import { useRef } from "react";
+import { deleteIngredient, moveIngredient } from "../../services/cart/actions";
 import { fetchOrder } from "../../services/order/actions";
 
 import {
@@ -30,8 +30,12 @@ const Cart = () => {
 
   const dispatch = useDispatch();
 
-  const handleDeleteIngredient = (ingredientId) => {
-    dispatch(deleteIngredient(ingredientId));
+  const handleDeleteIngredient = (key) => {
+    dispatch(deleteIngredient(key));
+  };
+
+  const moveIngredientHandler = (dragIndex, dropIndex) => {
+    dispatch(moveIngredient(dragIndex, dropIndex));
   };
 
   return (
@@ -45,11 +49,13 @@ const Cart = () => {
         extraClass="ml-8"
       />
       <ul className={styles.cart_container_inner + " mb-4 custom-scroll"}>
-        {cart.map((ingredient) => (
+        {cart.map((ingredient, index) => (
           <CartIngredientItem
+            index={index}
             handleClose={handleDeleteIngredient}
-            key={ingredient._id}
+            key={ingredient.key}
             ingredient={ingredient}
+            moveIngredient={moveIngredientHandler}
           />
         ))}
       </ul>
@@ -65,19 +71,52 @@ const Cart = () => {
   );
 };
 
-// Cart.propTypes = {
-//   ingredients: PropTypes.arrayOf(PropTypes.shape(IngredientType)).isRequired,
-// };
+const CartIngredientItem = ({
+  ingredient,
+  handleClose,
+  index,
+  moveIngredient,
+}) => {
+  const ref = useRef(null);
 
-const CartIngredientItem = ({ ingredient, handleClose }) => {
+  const [, drop] = useDrop({
+    accept: "ingredient",
+    hover(item, monitor) {
+      if (!ref.current) return;
+      const dragIndex = item.index;
+      const dropIndex = index;
+
+      if (dragIndex === dropIndex) return;
+
+      moveIngredient(dragIndex, dropIndex);
+      item.index = dropIndex;
+    },
+  });
+
+  const [{ isDragging }, drag] = useDrag({
+    type: "ingredient",
+    item: { index },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+
+  drag(drop(ref));
+
+  const opacity = isDragging ? 0 : 1;
   return (
-    <div className={styles.CartIngredientItem}>
+    <div
+      ref={ref}
+      style={{ opacity: opacity }}
+      className={styles.cart_ingredient_item}
+    >
       <DragIcon type="primary" />
       <ConstructorElement
         text={ingredient.name}
         price={ingredient.price}
         thumbnail={ingredient.image}
-        handleClose={() => handleClose(ingredient._id)}
+        handleClose={() => handleClose(ingredient.key)}
+        extraClass={styles.cart_ingredient_item_inner}
       />
     </div>
   );
@@ -85,6 +124,9 @@ const CartIngredientItem = ({ ingredient, handleClose }) => {
 
 CartIngredientItem.propTypes = {
   ingredient: IngredientType,
+  index: PropTypes.number.isRequired,
+  moveIngredient: PropTypes.func.isRequired,
+  handleClose: PropTypes.func.isRequired,
 };
 
 const Total = () => {
@@ -95,7 +137,7 @@ const Total = () => {
   const price = () => {
     let sum = 0;
     cart.forEach((item) => {
-      sum += item.price * item.count;
+      sum += item.price;
     });
     sum += bun.price * 2;
     return sum;
@@ -139,17 +181,13 @@ const Total = () => {
   );
 };
 
-const BurgerConstructor = ({ ingredients }) => {
+const BurgerConstructor = () => {
   return (
     <div className={styles.container}>
-      <Cart ingredients={ingredients} />
+      <Cart />
       <Total />
     </div>
   );
 };
-
-// BurgerConstructor.propTypes = {
-//   ingredients: PropTypes.arrayOf(PropTypes.shape(IngredientType)).isRequired,
-// };
 
 export default BurgerConstructor;
