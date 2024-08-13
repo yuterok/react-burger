@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchIngredients } from "../../services/ingredients/actions";
 
 export const apiLink = "https://norma.nomoreparties.space/api/ingredients";
+export const apiLinkOrder = "https://norma.nomoreparties.space/api/orders";
 
 function App() {
   const dispatch = useDispatch();

@@ -2,7 +2,9 @@ import PropTypes from "prop-types";
 import { useModal } from "../../hooks/useModal";
 import { useDrop } from "react-dnd";
 import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 import { deleteIngredient } from "../../services/cart/actions";
+import { fetchOrder } from "../../services/order/actions";
 
 import {
   CurrencyIcon,
@@ -87,6 +89,8 @@ CartIngredientItem.propTypes = {
 
 const Total = () => {
   const { cart, bun } = useSelector((state) => state.cart);
+  const { isModalOpen, openModal, closeModal } = useModal();
+  const dispatch = useDispatch();
 
   const price = () => {
     let sum = 0;
@@ -97,7 +101,18 @@ const Total = () => {
     return sum;
   };
 
-  const { isModalOpen, openModal, closeModal } = useModal();
+  const ingredients = cart.map(function (item) {
+    return item._id;
+  });
+
+  const orderIngredientsIDs = { ingredients };
+
+  const orderProcess = () => {
+    openModal();
+    if (cart.length > 0) {
+      dispatch(fetchOrder(orderIngredientsIDs));
+    }
+  };
 
   return (
     <div className={styles.total}>
@@ -107,7 +122,7 @@ const Total = () => {
       </div>
 
       <Button
-        onClick={openModal}
+        onClick={orderProcess}
         htmlType="button"
         type="primary"
         size="medium"

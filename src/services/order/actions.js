@@ -1,14 +1,15 @@
-export const FETCH_ORDER_REQUEST = 'FETCH_ORDER_REQUEST';
-export const FETCH_ORDER_SUCCESS = 'FETCH_ORDER_SUCCESS';
-export const FETCH_ORDER_FAILURE = 'FETCH_ORDER_FAILURE';
+import { apiLinkOrder } from "../../components/app/app";
+export const FETCH_ORDER_REQUEST = "FETCH_ORDER_REQUEST";
+export const FETCH_ORDER_SUCCESS = "FETCH_ORDER_SUCCESS";
+export const FETCH_ORDER_FAILURE = "FETCH_ORDER_FAILURE";
 
 export const fetchOrderRequest = () => ({
-type: FETCH_ORDER_REQUEST,
+  type: FETCH_ORDER_REQUEST,
 });
 
-export const fetchOrderSuccess = (ingredients) => ({
+export const fetchOrderSuccess = (info) => ({
   type: FETCH_ORDER_SUCCESS,
-  payload: ingredients,
+  payload: info,
 });
 
 export const fetchOrderFailure = (error) => ({
@@ -16,23 +17,26 @@ export const fetchOrderFailure = (error) => ({
   payload: error,
 });
 
-
-const apiLink = 'https://norma.nomoreparties.space/api/orders'
-
-export const fetchOrder = () => {
+export const fetchOrder = (data) => {
   return async (dispatch) => {
-    dispatch({ type: 'FETCH_INGREDIENTS_REQUEST' });
+    dispatch({ type: "FETCH_ORDER_REQUEST" });
 
     try {
-      const response = await fetch(apiLink);
+      const response = await fetch(apiLinkOrder, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
       if (!response.ok) {
         throw new Error(response.statusText);
       }
-      const data = await response.json();
-      dispatch({ type: 'FETCH_INGREDIENTS_SUCCESS', payload: data.data });
+      const result = await response.json();
+      dispatch({ type: "FETCH_ORDER_SUCCESS", payload: result });
     } catch (error) {
-      dispatch({ type: 'FETCH_INGREDIENTS_FAILURE', error: error.message });
-      console.log('error', error);
+      dispatch({ type: "FETCH_ORDER_FAILURE", error: error.message });
+      console.log("Order fetch error: ", error);
     }
   };
 };
