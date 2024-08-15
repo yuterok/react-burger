@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 export const ADD_INGREDIENT = "ADD_INGREDIENT";
 export const DELETE_INGREDIENT = "DELETE_INGREDIENT";
 export const REPLACE_BUN = "REPLACE_BUN";
+export const EMPTY_CART = "EMPTY_CART";
 
 export const MOVE_INGREDIENT = "MOVE_INGREDIENT";
 
@@ -24,4 +25,8 @@ export const replaceBun = (bun) => ({
 export const moveIngredient = (dragIndex, dropIndex) => ({
   type: MOVE_INGREDIENT,
   payload: { dragIndex, dropIndex },
+});
+
+export const emptyCart = () => ({
+  type: EMPTY_CART,
 });

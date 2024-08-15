@@ -3,7 +3,11 @@ import PropTypes from "prop-types";
 import { useDrop, useDrag } from "react-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { useRef } from "react";
-import { deleteIngredient, moveIngredient } from "../../services/cart/actions";
+import {
+  deleteIngredient,
+  emptyCart,
+  moveIngredient,
+} from "../../services/cart/actions";
 import { fetchOrder } from "../../services/order/actions";
 
 import {
@@ -19,6 +23,7 @@ import styles from "./burger-constructor.module.css";
 import { IngredientType } from "../../utils/types";
 import Modal from "../modal/modal";
 import OrderDetails from "./order-details/order-details";
+import { Placeholder } from "./constructor-placeholders/constructor-placeholders";
 
 const Cart = () => {
   const { cart, bun } = useSelector((state) => state.cart);
@@ -40,33 +45,45 @@ const Cart = () => {
 
   return (
     <div ref={dropRef} className={styles.cart_container + " mt-25 mb-10"}>
-      <ConstructorElement
-        type="top"
-        isLocked={true}
-        text={bun.name + " (верх)"}
-        price={bun.price}
-        thumbnail={bun.image}
-        extraClass="ml-8"
-      />
-      <ul className={styles.cart_container_inner + " mb-4 custom-scroll"}>
-        {cart.map((ingredient, index) => (
-          <CartIngredientItem
-            index={index}
-            handleClose={handleDeleteIngredient}
-            key={ingredient.key}
-            ingredient={ingredient}
-            moveIngredient={moveIngredientHandler}
-          />
-        ))}
-      </ul>
-      <ConstructorElement
-        type="bottom"
-        isLocked={true}
-        text={bun.name + " (низ)"}
-        price={bun.price}
-        thumbnail={bun.image}
-        extraClass="ml-8"
-      />
+      {bun ? (
+        <ConstructorElement
+          type="top"
+          isLocked={true}
+          text={bun.name + " (верх)"}
+          price={bun.price}
+          thumbnail={bun.image}
+          extraClass="ml-8"
+        />
+      ) : (
+        <Placeholder form="top" />
+      )}
+      {cart.length === 0 ? (
+        <Placeholder form="ingredient" />
+      ) : (
+        <ul className={styles.cart_container_inner + " mb-4 custom-scroll"}>
+          {cart.map((ingredient, index) => (
+            <CartIngredientItem
+              index={index}
+              handleClose={handleDeleteIngredient}
+              key={ingredient.key}
+              ingredient={ingredient}
+              moveIngredient={moveIngredientHandler}
+            />
+          ))}
+        </ul>
+      )}
+      {bun ? (
+        <ConstructorElement
+          type="bottom"
+          isLocked={true}
+          text={bun.name + " (низ)"}
+          price={bun.price}
+          thumbnail={bun.image}
+          extraClass="ml-8"
+        />
+      ) : (
+        <Placeholder form="bottom" />
+      )}
     </div>
   );
 };
@@ -156,24 +173,31 @@ const Total = () => {
     }
   };
 
+  const closing = () => {
+    closeModal();
+    dispatch(emptyCart());
+  };
   return (
     <div className={styles.total}>
-      <div className={styles.total_price}>
-        <p className="text text_type_digits-medium">{price()}</p>
-        <CurrencyIcon type="primary" />
-      </div>
-
-      <Button
-        onClick={orderProcess}
-        htmlType="button"
-        type="primary"
-        size="medium"
-        extraClass="ml-2"
-      >
-        Оформить заказ
-      </Button>
+      {bun && (
+        <div className={styles.total_price}>
+          <p className="text text_type_digits-medium">{price()}</p>
+          <CurrencyIcon type="primary" />
+        </div>
+      )}
+      {bun && (
+        <Button
+          onClick={orderProcess}
+          htmlType="button"
+          type="primary"
+          size="medium"
+          extraClass="ml-2"
+        >
+          Оформить заказ
+        </Button>
+      )}
       {isModalOpen && (
-        <Modal onClose={closeModal}>
+        <Modal onClose={closing}>
           <OrderDetails />
         </Modal>
       )}

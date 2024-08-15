@@ -7,8 +7,11 @@ import BurgerConstructor from "../burger-constructor/burger-constructor";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchIngredients } from "../../services/ingredients/actions";
 
-export const apiLink = "https://norma.nomoreparties.space/api/ingredients";
-export const apiLinkOrder = "https://norma.nomoreparties.space/api/orders";
+export const BASE_URL = "https://norma.nomoreparties.space/api";
+
+export const apiLink = BASE_URL + "/ingredients";
+
+export const apiLinkOrder = BASE_URL + "/orders";
 
 function App() {
   const dispatch = useDispatch();

@@ -1,4 +1,5 @@
-import { apiLinkOrder } from "../../components/app/app";
+import { BASE_URL } from "../../components/app/app";
+import { request } from "../../utils/request";
 export const FETCH_ORDER_REQUEST = "FETCH_ORDER_REQUEST";
 export const FETCH_ORDER_SUCCESS = "FETCH_ORDER_SUCCESS";
 export const FETCH_ORDER_FAILURE = "FETCH_ORDER_FAILURE";
@@ -19,23 +20,18 @@ export const fetchOrderFailure = (error) => ({
 
 export const fetchOrder = (data) => {
   return async (dispatch) => {
-    dispatch({ type: "FETCH_ORDER_REQUEST" });
-
+    dispatch({ type: FETCH_ORDER_REQUEST });
     try {
-      const response = await fetch(apiLinkOrder, {
+      const res = await request(`${BASE_URL}/orders`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       });
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
-      const result = await response.json();
-      dispatch({ type: "FETCH_ORDER_SUCCESS", payload: result });
+      dispatch({ type: FETCH_ORDER_SUCCESS, payload: res });
     } catch (error) {
-      dispatch({ type: "FETCH_ORDER_FAILURE", error: error.message });
+      dispatch({ type: FETCH_ORDER_FAILURE, error: error.message });
       console.log("Order fetch error: ", error);
     }
   };

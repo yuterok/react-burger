@@ -53,7 +53,7 @@ const IngredientItem = ({ ingredient }) => {
     closeModal();
   };
 
-  const { cart } = useSelector((state) => state.cart);
+  const { cart, bun } = useSelector((state) => state.cart);
 
   const countIngredients = (ingredient) => {
     let count = 0;
@@ -63,6 +63,9 @@ const IngredientItem = ({ ingredient }) => {
           count += 1;
         }
       });
+    }
+    if (bun && bun._id === ingredient._id) {
+      count = 1;
     }
     return count;
   };
