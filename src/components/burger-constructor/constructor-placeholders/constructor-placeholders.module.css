@@ -1,0 +1,16 @@
+.container {
+  box-sizing: border-box;
+  display: inline-block;
+  padding: 16px 24px;
+  background-color: var(--background-element);
+  min-height: 80px;
+  width: 100%;
+  text-align: center;
+  align-content: center;
+  margin: 10px 0;
+  cursor: pointer;
+}
+
+.container:hover {
+  border: 1px dashed var(--interface-accent);
+}

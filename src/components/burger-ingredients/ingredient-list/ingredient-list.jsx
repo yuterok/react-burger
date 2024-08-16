@@ -1,13 +1,13 @@
+import { useSelector } from "react-redux";
 import IngredientItem from "../ingredient-item/ingredient-item";
-import { IngredientType } from "../../../utils/types";
 import PropTypes from "prop-types";
 import styles from "./ingredient-list.module.css";
 
-const IngredientsList = ({ type, ingredients }) => {
-  const filteredIngredients = ingredients.filter(
+const IngredientsList = ({ type }) => {
+  const { items } = useSelector((state) => state.ingredients);
+  const filteredIngredients = items.filter(
     (ingredient) => ingredient.type === type
   );
-
   return (
     <div className={styles.ingredients_list}>
       <p id={type} className="text text_type_main-medium">
@@ -30,7 +30,6 @@ const IngredientsList = ({ type, ingredients }) => {
 
 IngredientsList.propTypes = {
   type: PropTypes.string.isRequired,
-  ingredients: PropTypes.arrayOf(PropTypes.shape(IngredientType)).isRequired,
 };
 
 export default IngredientsList;

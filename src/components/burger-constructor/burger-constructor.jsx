@@ -1,4 +1,14 @@
+import { useModal } from "../../hooks/useModal";
 import PropTypes from "prop-types";
+import { useDrop, useDrag } from "react-dnd";
+import { useDispatch, useSelector } from "react-redux";
+import { useRef } from "react";
+import {
+  deleteIngredient,
+  emptyCart,
+  moveIngredient,
+} from "../../services/cart/actions";
+import { fetchOrder } from "../../services/order/actions";
 
 import {
   CurrencyIcon,
@@ -13,58 +23,117 @@ import styles from "./burger-constructor.module.css";
 import { IngredientType } from "../../utils/types";
 import Modal from "../modal/modal";
 import OrderDetails from "./order-details/order-details";
-import { useModal } from "../../hooks/useModal";
+import { Placeholder } from "./constructor-placeholders/constructor-placeholders";
 
-const Cart = ({ ingredients }) => {
-  if (!Array.isArray(ingredients) || ingredients.length === 0) {
-    return null;
-  }
+const Cart = () => {
+  const { cart, bun } = useSelector((state) => state.cart);
 
-  const filteredIngredients = ingredients.filter(
-    (ingredient) => ingredient.type == "sauce" || ingredient.type == "main"
-  );
+  const [, dropRef] = useDrop({
+    accept: ["bun", "ingredient"],
+    drop: (item) => ({ name: "BurgerConstructor" }),
+  });
 
-  const selectedBun = ingredients[0];
+  const dispatch = useDispatch();
+
+  const handleDeleteIngredient = (key) => {
+    dispatch(deleteIngredient(key));
+  };
+
+  const moveIngredientHandler = (dragIndex, dropIndex) => {
+    dispatch(moveIngredient(dragIndex, dropIndex));
+  };
 
   return (
-    <div className={styles.cart_container + " mt-25 mb-10"}>
-      <ConstructorElement
-        type="top"
-        isLocked={true}
-        text={selectedBun.name + " (верх)"}
-        price={selectedBun.price}
-        thumbnail={selectedBun.image}
-        extraClass="ml-8"
-      />
-      <ul className={styles.cart_container_inner + " mb-4 custom-scroll"}>
-        {filteredIngredients.map((ingredient) => (
-          <CartIngredientItem key={ingredient._id} ingredient={ingredient} />
-        ))}
-      </ul>
-      <ConstructorElement
-        type="bottom"
-        isLocked={true}
-        text={selectedBun.name + " (низ)"}
-        price={selectedBun.price}
-        thumbnail={selectedBun.image}
-        extraClass="ml-8"
-      />
+    <div ref={dropRef} className={styles.cart_container + " mt-25 mb-10"}>
+      {bun ? (
+        <ConstructorElement
+          type="top"
+          isLocked={true}
+          text={bun.name + " (верх)"}
+          price={bun.price}
+          thumbnail={bun.image}
+          extraClass="ml-8"
+        />
+      ) : (
+        <Placeholder form="top" />
+      )}
+      {cart.length === 0 ? (
+        <Placeholder form="ingredient" />
+      ) : (
+        <ul className={styles.cart_container_inner + " mb-4 custom-scroll"}>
+          {cart.map((ingredient, index) => (
+            <CartIngredientItem
+              index={index}
+              handleClose={handleDeleteIngredient}
+              key={ingredient.key}
+              ingredient={ingredient}
+              moveIngredient={moveIngredientHandler}
+            />
+          ))}
+        </ul>
+      )}
+      {bun ? (
+        <ConstructorElement
+          type="bottom"
+          isLocked={true}
+          text={bun.name + " (низ)"}
+          price={bun.price}
+          thumbnail={bun.image}
+          extraClass="ml-8"
+        />
+      ) : (
+        <Placeholder form="bottom" />
+      )}
     </div>
   );
 };
 
-Cart.propTypes = {
-  ingredients: PropTypes.arrayOf(PropTypes.shape(IngredientType)).isRequired,
-};
+const CartIngredientItem = ({
+  ingredient,
+  handleClose,
+  index,
+  moveIngredient,
+}) => {
+  const ref = useRef(null);
 
-const CartIngredientItem = ({ ingredient }) => {
+  const [, drop] = useDrop({
+    accept: "ingredient",
+    hover(item, monitor) {
+      if (!ref.current) return;
+      const dragIndex = item.index;
+      const dropIndex = index;
+
+      if (dragIndex === dropIndex) return;
+
+      moveIngredient(dragIndex, dropIndex);
+      item.index = dropIndex;
+    },
+  });
+
+  const [{ isDragging }, drag] = useDrag({
+    type: "ingredient",
+    item: { index },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+
+  drag(drop(ref));
+
+  const opacity = isDragging ? 0 : 1;
   return (
-    <div className={styles.CartIngredientItem}>
+    <div
+      ref={ref}
+      style={{ opacity: opacity }}
+      className={styles.cart_ingredient_item}
+    >
       <DragIcon type="primary" />
       <ConstructorElement
         text={ingredient.name}
         price={ingredient.price}
         thumbnail={ingredient.image}
+        handleClose={() => handleClose(ingredient.key)}
+        extraClass={styles.cart_ingredient_item_inner}
       />
     </div>
   );
@@ -72,29 +141,63 @@ const CartIngredientItem = ({ ingredient }) => {
 
 CartIngredientItem.propTypes = {
   ingredient: IngredientType,
+  index: PropTypes.number.isRequired,
+  moveIngredient: PropTypes.func.isRequired,
+  handleClose: PropTypes.func.isRequired,
 };
 
-const Total = (props) => {
+const Total = () => {
+  const { cart, bun } = useSelector((state) => state.cart);
   const { isModalOpen, openModal, closeModal } = useModal();
+  const dispatch = useDispatch();
 
+  const price = () => {
+    let sum = 0;
+    cart.forEach((item) => {
+      sum += item.price;
+    });
+    sum += bun.price * 2;
+    return sum;
+  };
+
+  const ingredients = cart.map(function (item) {
+    return item._id;
+  });
+
+  const orderIngredientsIDs = { ingredients };
+
+  const orderProcess = () => {
+    openModal();
+    if (cart.length > 0) {
+      dispatch(fetchOrder(orderIngredientsIDs));
+    }
+  };
+
+  const closing = () => {
+    closeModal();
+    dispatch(emptyCart());
+  };
   return (
     <div className={styles.total}>
-      <div className={styles.total_price}>
-        <p className="text text_type_digits-medium">{props.price}</p>
-        <CurrencyIcon type="primary" />
-      </div>
-
-      <Button
-        onClick={openModal}
-        htmlType="button"
-        type="primary"
-        size="medium"
-        extraClass="ml-2"
-      >
-        Оформить заказ
-      </Button>
+      {bun && (
+        <div className={styles.total_price}>
+          <p className="text text_type_digits-medium">{price()}</p>
+          <CurrencyIcon type="primary" />
+        </div>
+      )}
+      {bun && (
+        <Button
+          onClick={orderProcess}
+          htmlType="button"
+          type="primary"
+          size="medium"
+          extraClass="ml-2"
+        >
+          Оформить заказ
+        </Button>
+      )}
       {isModalOpen && (
-        <Modal onClose={closeModal}>
+        <Modal onClose={closing}>
           <OrderDetails />
         </Modal>
       )}
@@ -102,21 +205,13 @@ const Total = (props) => {
   );
 };
 
-Total.propTypes = {
-  price: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-};
-
-const BurgerConstructor = ({ ingredients }) => {
+const BurgerConstructor = () => {
   return (
     <div className={styles.container}>
-      <Cart ingredients={ingredients} />
-      <Total price="610" />
+      <Cart />
+      <Total />
     </div>
   );
-};
-
-BurgerConstructor.propTypes = {
-  ingredients: PropTypes.arrayOf(PropTypes.shape(IngredientType)).isRequired,
 };
 
 export default BurgerConstructor;
