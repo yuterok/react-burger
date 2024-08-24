@@ -1,4 +1,4 @@
-import { BASE_URL } from "../../components/app/app";
+import { BASE_URL } from "../../utils/constants";
 import { request } from "../../utils/request";
 
 export const FETCH_INGREDIENTS_REQUEST = "FETCH_INGREDIENTS_REQUEST";

@@ -1,10 +1,13 @@
-export function checkResponse(res) {
+export const checkResponse = (res) => {
   if (!res.ok) {
-    throw new Error(res.statusText);
+    return res.json().then((err) => {
+      err.statusCode = res.status;
+      return Promise.reject(err);
+    });
   }
   return res.json();
-}
+};
 
-export function request(url, options) {
+export const request = (url, options) => {
   return fetch(url, options).then(checkResponse);
-}
+};

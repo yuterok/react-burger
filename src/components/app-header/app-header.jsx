@@ -5,6 +5,7 @@ import {
   ProfileIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./app-header.module.css";
+import { Link } from "react-router-dom";
 
 const NavLink = ({ isActive, link, text, Icon }) => {
   return (

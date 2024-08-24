@@ -1,4 +1,4 @@
-.app {
+.App {
   min-height: 100vh;
   background-color: var(--interface-bg);
 }
@@ -8,4 +8,8 @@
   max-width: 1240px;
   display: flex;
   gap: 40px;
+}
+
+.warning{
+  text-align: center;
 }

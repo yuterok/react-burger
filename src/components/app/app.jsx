@@ -1,47 +1,36 @@
-import { useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  HomePage,
+  Login,
+  Register,
+  ForgotPassword,
+  ResetPassword,
+  Profile,
+  IngredientID,
+  Page404,
+} from "../../pages";
 
-import styles from "./app.module.css";
+import styles from './app.module.css';
+
 import AppHeader from "../app-header/app-header";
-import BurgerIngredients from "../burger-ingredients/burger-ingredients";
-import BurgerConstructor from "../burger-constructor/burger-constructor";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchIngredients } from "../../services/ingredients/actions";
 
-export const BASE_URL = "https://norma.nomoreparties.space/api";
-
-export const apiLink = BASE_URL + "/ingredients";
-
-export const apiLinkOrder = BASE_URL + "/orders";
 
 function App() {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchIngredients());
-  }, [apiLink]);
-
-  const { items, itemsRequest, itemsFailed } = useSelector(
-    (state) => state.ingredients
-  );
-
   return (
     <div className={styles.app}>
       <AppHeader />
-
-      {itemsRequest ? (
-        <h1 className={`${styles.warning} text text_type_main-large mt-10`}>
-          Загрузка...
-        </h1>
-      ) : itemsFailed ? (
-        <h1 className={`${styles.warning} text text_type_main-large mt-10`}>
-          Ошибка загрузки данных с сервера
-        </h1>
-      ) : (
-        <main className={styles.container}>
-          <BurgerIngredients />
-          <BurgerConstructor />
-        </main>
-      )}
+      <Router>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/ingredients/:id" element={<IngredientID />} />
+          <Route path="/*" element={<Page404 />} />
+        </Routes>
+      </Router>
     </div>
   );
 }
