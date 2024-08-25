@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { request } from "../utils/request";
+import { useDispatch } from "react-redux"
+import { fetchRegister, fetchRegisterSuccess } from "../services/user/register/actions";
+import {isEmailValid} from "../utils/form-validation";
 
 import styles from "./login.module.css";
 import { Link } from "react-router-dom";
@@ -18,6 +20,7 @@ export const Register = () => {
   const [name, setName] = useState("");
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const url = "https://norma.nomoreparties.space/api/auth/register";
 
@@ -27,36 +30,21 @@ export const Register = () => {
     name: name,
   };
 
-  const FetchRegister = async (e) => {
+  const register = async (e) => {
     e.preventDefault();
-
     const validateForm = () => {
       if (!email || !password || !name) {
-        console.log("Все поля должны быть заполнены"); // Устанавливаем сообщение об ошибке
         return false;
       }
       return true;
     };
-
-    if (!validateForm()) {
-      return; // Прерываем выполнение, если форма невалидна
+    if (!validateForm() || (!isEmailValid(email))) {
+      return;
     }
+    dispatch(fetchRegister(data));
+    if (fetchRegisterSuccess) {
 
-    try {
-      const res = await request(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      console.log("Registration successful:", res);
-      navigate("/", { replace: true });
-    } catch (error) {
-      if (error.message == "User already exists") {
-        alert("Пользователь с таким e-mail уже существует");
-      }
-      console.error("Registration failed:", error);
+    navigate("/", { replace: true });
     }
   };
 
@@ -86,7 +74,7 @@ export const Register = () => {
             htmlType="submit"
             type="primary"
             size="large"
-            onClick={FetchRegister}
+            onClick={register}
           >
             Зарегистрироваться
           </Button>

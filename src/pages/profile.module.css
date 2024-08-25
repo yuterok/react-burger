@@ -1,0 +1,33 @@
+.container{
+    display: flex;
+    margin-top: 100px;
+    width: 100%;
+    gap: 60px;
+}
+.menu{
+    max-width: 320px;
+}
+.menu_inner{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.link{
+    text-decoration: none;
+    color: var(--dark-gray-secondary-text);
+}
+.link:hover{
+    color: var(--interface-accent);
+}
+.active{
+    composes: link;
+    color: var(--interface-accent);
+}
+  
