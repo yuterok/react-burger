@@ -6,6 +6,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./app-header.module.css";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const CustomNavLink = ({ link, text, Icon }) => {
   const nav_link_style = `${styles.nav_link} text text_type_main-default pl-5 pr-5 pb-5 pt-5`
@@ -22,6 +23,7 @@ const CustomNavLink = ({ link, text, Icon }) => {
 };
 
 const AppHeader = () => {
+  const {user} = useSelector((state) => state);
   return (
     <>
       <header className={styles.header + " p-4"}>
@@ -46,7 +48,7 @@ const AppHeader = () => {
           <div className={styles.nav_section}>
             <CustomNavLink
               link="/profile"
-              text="Личный кабинет"
+              text={user.name ? user.name : 'Личный кабинет'}
               Icon={ProfileIcon}
             />
           </div>

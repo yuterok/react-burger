@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import {
   HomePage,
   Login,
@@ -17,7 +17,6 @@ import AppHeader from "../app-header/app-header";
 function App() {
   return (
     <div className={styles.app}>
-      <Router>
         <AppHeader />
         <div className={styles.container}>
           <Routes>
@@ -31,7 +30,7 @@ function App() {
             <Route path="/*" element={<Page404 />} />
           </Routes>
         </div>
-      </Router>
+
     </div>
   );
 }

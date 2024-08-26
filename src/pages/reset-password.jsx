@@ -28,7 +28,8 @@ export const ResetPassword = () => {
           body: JSON.stringify(data),
         });
         if (res.success) {
-          navigate("/", { replace: true });
+          localStorage.removeItem('resetPassword');
+          navigate("/login", { replace: true });
         } else {
           alert("Данные неверны!");
         }

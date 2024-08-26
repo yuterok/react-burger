@@ -27,6 +27,7 @@ export const ForgotPassword = () => {
         });
         if (res.success && email) {
           console.log(res);
+          localStorage.setItem('resetPassword', true);
           navigate("/reset-password", { replace: true });
         }
       } catch (error) {

@@ -1,4 +1,11 @@
 import { Link } from "react-router-dom";
+import {isEmailValid} from "../utils/form-validation";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux"
+import { useState } from "react";
+import { fetchLogin } from "../services/user/actions";
+import { useSelector } from "react-redux";
+
 import styles from "./login.module.css";
 
 import {
@@ -8,13 +15,45 @@ import {
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 
 export const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { loginRequest, loginFailed } = useSelector(
+    (state) => state.user
+  );
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const data = {
+    email: email, 
+    password: password, 
+  }
+  const login = async (e) => {
+    e.preventDefault();
+    console.log(data)
+    const validateForm = () => {
+      if (!email || !password) {
+        return false;
+      }
+      return true;
+    };
+    if (!validateForm() || (!isEmailValid(email))) {
+      return;
+    }
+    dispatch(fetchLogin(data));
+    if (!loginRequest && !loginFailed) {
+    navigate("/", { replace: true });
+    }
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.container_inner}>
         <h3 className="text text_type_main-medium">Вход</h3>
-        <EmailCustomInput extraClass="mt-6 mb-6" />
-        <PasswordCustomInput extraClass="mb-6" />
-        <Button htmlType="button" type="primary" size="large">
+        <EmailCustomInput value={email} setValue={setEmail} extraClass="mt-6 mb-6" />
+        <PasswordCustomInput value={password} setValue={setPassword}extraClass="mb-6" />
+        <Button htmlType="button" type="primary" size="large" onClick={login}>
           Войти
         </Button>
         <div className={`${styles.link_container} mt-20 mb-4`}>

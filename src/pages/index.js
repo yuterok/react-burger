@@ -1,4 +1,4 @@
-import { HomePage } from './home-page';
+import { HomePage } from './home';
 import { Login } from './login';
 import { Register } from './register';
 import { ForgotPassword } from './forgot-password';

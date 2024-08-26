@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux"
-import { fetchRegister, fetchRegisterSuccess } from "../services/user/register/actions";
+import { fetchRegister, fetchRegisterSuccess } from "../services/user/actions";
 import {isEmailValid} from "../utils/form-validation";
 
 import styles from "./login.module.css";

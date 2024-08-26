@@ -2,7 +2,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchIngredients } from "../services/ingredients/actions";
 
-
 import BurgerIngredients from "../components/burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../components/burger-constructor/burger-constructor";
 import styles from "./home.module.css";
@@ -24,7 +23,6 @@ export const HomePage = () => {
 
   return (
     <div className={styles.app}>
-
       {itemsRequest ? (
         <h1 className={`${styles.warning} text text_type_main-large mt-10`}>
           Загрузка...
