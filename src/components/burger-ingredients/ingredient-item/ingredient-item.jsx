@@ -1,5 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useDrag } from "react-dnd";
+import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import {
   Counter,
   CurrencyIcon,
@@ -21,6 +23,7 @@ import { addIngredient, replaceBun } from "../../../services/cart/actions";
 const IngredientItem = ({ ingredient }) => {
   const { isModalOpen, openModal, closeModal } = useModal();
   const { currentIngredient } = useSelector((state) => state.currentIngredient);
+  const location = useLocation();
 
   const dispatch = useDispatch();
 
@@ -45,12 +48,12 @@ const IngredientItem = ({ ingredient }) => {
 
   const setCurrentItem = () => {
     dispatch(setCurrentIngredient(ingredient));
-    openModal();
+    // openModal();
   };
 
   const clearCurrentItem = () => {
     dispatch(clearCurrentIngredient());
-    closeModal();
+    // closeModal();
   };
 
   const { cart, bun } = useSelector((state) => state.cart);
@@ -71,11 +74,14 @@ const IngredientItem = ({ ingredient }) => {
   };
 
   return (
-    <li
+    <Link
+      key={ingredient._id}
+      to={`/ingredients/${ingredient._id}`}
       ref={dragRef}
       className={styles.ingredient_block + " pl-4"}
       onClick={setCurrentItem}
       style={{ opacity: opacity }}
+      state={{backgroundLocation: location}}
     >
       {countIngredients(ingredient) > 0 ? (
         <Counter
@@ -98,7 +104,7 @@ const IngredientItem = ({ ingredient }) => {
           <IngredientDetails ingredient={currentIngredient} />
         </Modal>
       )}
-    </li>
+    </Link>
   );
 };
 

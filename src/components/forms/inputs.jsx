@@ -18,7 +18,7 @@ export const CustomInput = ({
       type={"text"}
       placeholder={placeholder}
       onChange={(e) => setValue(e.target.value)}
-      value={value}
+      value={value || ''}
       name={name}
       error={false}
       ref={inputRef}
@@ -38,7 +38,7 @@ export const EmailCustomInput = ({ extraClass, value='', setValue }) => {
     <div style={{ display: "flex", flexDirection: "column" }}>
       <EmailInput
         onChange={onChange}
-        value={value}
+        value={value || ''}
         name={"email"}
         isIcon={false}
         errorText="Введите корректный e-mail"
@@ -62,7 +62,7 @@ export const PasswordCustomInput = ({
     <div style={{ display: "flex", flexDirection: "column" }}>
       <PasswordInput
         onChange={onChange}
-        value={value}
+        value={value || ''}
         name={"password"}
         extraClass={extraClass}
         error={false}
@@ -82,7 +82,7 @@ export const EditEmailInput = () => {
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       <EmailInput
         onChange={onChange}
-        value={value}
+        value={value || ''}
         name={'email'}
         placeholder="Логин"
         isIcon={true}
@@ -100,7 +100,7 @@ export const EditPasswordInput = () => {
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       <PasswordInput
         onChange={onChange}
-        value={value}
+        value={value || ''}
         name={'password'}
         icon="EditIcon"
       />
@@ -127,7 +127,7 @@ export const EditNameInput = () => {
       placeholder={'Имя'}
       onChange={e => setValue(e.target.value)}
       icon={'EditIcon'}
-      value={value}
+      value={value || ''}
       name={'name'}
       error={false}
       ref={inputRef}

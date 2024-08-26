@@ -38,6 +38,7 @@ const AppHeader = () => {
               link="/profile/orders"
               text="Лента заказов"
               Icon={ListIcon}
+              end={false}
             />
           </div>
           <div className={styles.logo}>
@@ -47,7 +48,7 @@ const AppHeader = () => {
 
           <div className={styles.nav_section}>
             <CustomNavLink
-              link="/profile"
+              link="/login"
               text={user.name ? user.name : 'Личный кабинет'}
               Icon={ProfileIcon}
             />

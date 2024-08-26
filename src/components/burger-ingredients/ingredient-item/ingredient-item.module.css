@@ -6,6 +6,8 @@
   gap: 5px;
   text-align: center;
   cursor: pointer;
+  text-decoration: none;
+  color: white;
 }
 
 .item_price {

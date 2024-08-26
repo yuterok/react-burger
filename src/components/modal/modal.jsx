@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { createPortal } from "react-dom";
 import PropTypes from "prop-types";
 
@@ -10,6 +11,7 @@ const modalRoot = document.getElementById("react-modals");
 
 const Modal = ({ onClose, children }) => {
   const element = useMemo(() => document.createElement("div"), []);
+  const navigate = useNavigate();
   element.classList.add(styles.modal_wrapper);
 
   useEffect(() => {
@@ -31,7 +33,8 @@ const Modal = ({ onClose, children }) => {
 
   const handleClick = (e) => {
     e.stopPropagation();
-    onClose();
+    // onClose();
+    navigate(-1);
   };
 
   return createPortal(

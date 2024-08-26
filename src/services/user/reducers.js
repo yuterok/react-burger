@@ -12,10 +12,8 @@ const initialState = {
     "name": "" ,
     loginRequest: false,
     loginFailed: false,
-    loginSuccess: false,
     registerRequest: false,
     registerFailed: false,
-    registerSuccess: false,
 } 
 
 
