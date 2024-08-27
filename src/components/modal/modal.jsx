@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { createPortal } from "react-dom";
+import { useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 
 import styles from "./modal.module.css";
@@ -12,6 +13,7 @@ const modalRoot = document.getElementById("react-modals");
 const Modal = ({ onClose, children }) => {
   const element = useMemo(() => document.createElement("div"), []);
   const navigate = useNavigate();
+  const id = useParams().id;
   element.classList.add(styles.modal_wrapper);
 
   useEffect(() => {
@@ -24,7 +26,7 @@ const Modal = ({ onClose, children }) => {
   useEffect(() => {
     const handleEscape = (e) => {
       if (e.key === "Escape") {
-        onClose();
+        id ? navigate(-1) : onClose();
       }
     };
     window.addEventListener("keydown", handleEscape);
@@ -33,8 +35,7 @@ const Modal = ({ onClose, children }) => {
 
   const handleClick = (e) => {
     e.stopPropagation();
-    // onClose();
-    navigate(-1);
+    id ? navigate(-1) : onClose();
   };
 
   return createPortal(
@@ -52,7 +53,7 @@ const Modal = ({ onClose, children }) => {
 };
 
 Modal.propTypes = {
-  onClose: PropTypes.func.isRequired,
+  onClose: PropTypes.func,
   children: PropTypes.node.isRequired,
 };
 

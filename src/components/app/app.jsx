@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchIngredients } from "../../services/ingredients/actions";
@@ -24,8 +24,6 @@ import IngredientDetails from "../burger-ingredients/ingredient-details/ingredie
 function App() {
   let location = useLocation();
   let state = location.state;
-
-  const { currentIngredient } = useSelector((state) => state.currentIngredient);
 
   const dispatch = useDispatch();
   const apiLink = BASE_URL + "/ingredients";
@@ -68,7 +66,7 @@ function App() {
                   path="/ingredients/:id"
                   element={
                     <Modal>
-                      <IngredientDetails ingredient={currentIngredient} />
+                      <IngredientDetails />
                     </Modal>
                   }
                 />
