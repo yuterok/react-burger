@@ -2,6 +2,8 @@ import { Routes, Route, useLocation, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchIngredients } from "../../services/ingredients/actions";
+import { checkUserAuth } from "../../services/user/actions";
+
 import {
   HomePage,
   Login,
@@ -20,24 +22,30 @@ import styles from "./app.module.css";
 
 import AppHeader from "../app-header/app-header";
 import IngredientDetails from "../burger-ingredients/ingredient-details/ingredient-details";
+import { checkResponse, fetchWithRefresh } from "../../utils/request";
 
 function App() {
   let location = useLocation();
   let state = location.state;
 
+  useEffect(() => {
+    dispatch(checkUserAuth());
+  }, []);
+
   const dispatch = useDispatch();
-  const apiLink = BASE_URL + "/ingredients";
   useEffect(() => {
     dispatch(fetchIngredients());
-  }, [apiLink]);
+  }, [BASE_URL]);
 
   const { itemsRequest, itemsFailed, items } = useSelector(
     (state) => state.ingredients
   );
 
+  const { isAuthChecked } = useSelector((state) => state.user);
+
   return (
     <div className={styles.app}>
-      {itemsRequest ? (
+      {itemsRequest || !isAuthChecked ? (
         <h1 className={`${styles.warning} text text_type_main-large mt-10`}>
           Загрузка...
         </h1>

@@ -1,4 +1,5 @@
 import { Logo } from "@ya.praktikum/react-developer-burger-ui-components";
+
 import {
   ListIcon,
   BurgerIcon,
@@ -23,7 +24,11 @@ const CustomNavLink = ({ link, text, Icon }) => {
 };
 
 const AppHeader = () => {
-  const {user} = useSelector((state) => state);
+
+  const {user} = useSelector((state) => state.user);
+  let userName;
+  if (user)
+    {userName = user.name}
   return (
     <>
       <header className={styles.header + " p-4"}>
@@ -49,7 +54,7 @@ const AppHeader = () => {
           <div className={styles.nav_section}>
             <CustomNavLink
               link="/login"
-              text={user.name ? user.name : 'Личный кабинет'}
+              text={userName ? userName : 'Личный кабинет'}
               Icon={ProfileIcon}
             />
           </div>
