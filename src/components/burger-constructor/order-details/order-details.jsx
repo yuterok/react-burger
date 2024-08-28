@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 
 import styles from "./order-details.module.css";
+import { Preloader } from "../../ui-components/preloader";
 import doneImg from "../../../images/done.png";
 
 const OrderDetails = () => {
@@ -15,9 +16,7 @@ const OrderDetails = () => {
           Заказ пуст. Добавьте ингредиенты
         </h1>
       ) : orderRequest ? (
-        <h1 className={`${styles.warning} text text_type_main-large mt-10`}>
-          Загрузка...
-        </h1>
+        <Preloader />
       ) : orderFailed ? (
         <h1 className={`${styles.warning} text text_type_main-large mt-10`}>
           Ошибка загрузки данных с сервера

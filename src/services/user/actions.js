@@ -149,7 +149,7 @@ export const checkUserAuth = () => {
           method: "GET",
           headers: {
             "Content-Type": "application/json;charset=utf-8",
-            "Authorization": accessToken
+            Authorization: accessToken,
           },
         });
         dispatch(fetchLoginSuccess(res));
@@ -173,7 +173,7 @@ export const updateUserProfile = (data) => {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          Authorization: localStorage.getItem("accessToken")
+          Authorization: localStorage.getItem("accessToken"),
         },
         body: JSON.stringify(data),
       });

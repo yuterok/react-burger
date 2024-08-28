@@ -7,7 +7,7 @@ import {
   EditEmailInput,
   EditPasswordInput,
   EditNameInput,
-} from "../components/forms/inputs";
+} from "../components/ui-components/inputs";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./profile.module.css";
 
@@ -39,7 +39,6 @@ export const Profile = () => {
 
   const handleSave = () => {
     dispatch(updateUserProfile(formValues));
-    console.log("formValues", formValues);
   };
 
   const handleCancel = () => {
@@ -55,8 +54,7 @@ export const Profile = () => {
   };
 
   const loggingOut = () => {
-    navigate('/login');
-    console.log('log OUT')
+    navigate("/login");
     dispatch(logOut());
   };
 

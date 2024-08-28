@@ -12,7 +12,7 @@ import {
   EmailCustomInput,
   CustomInput,
   PasswordCustomInput,
-} from "../components/forms/inputs";
+} from "../components/ui-components/inputs";
 
 export const Register = () => {
   const [email, setEmail] = useState("");

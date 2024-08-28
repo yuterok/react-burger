@@ -11,7 +11,7 @@ import styles from "./login.module.css";
 import {
   EmailCustomInput,
   PasswordCustomInput,
-} from "../components/forms/inputs";
+} from "../components/ui-components/inputs";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 
 export const Login = () => {

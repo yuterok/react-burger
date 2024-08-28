@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./login.module.css";
 
-import { PasswordCustomInput, CustomInput } from "../components/forms/inputs";
+import { PasswordCustomInput, CustomInput } from "../components/ui-components/inputs";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { request } from "../utils/request";
