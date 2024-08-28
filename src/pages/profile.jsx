@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { logOut, updateUserProfile } from "../services/user/actions";
 import {
   EditEmailInput,
   EditPasswordInput,
   EditNameInput,
 } from "../components/forms/inputs";
-import {
-  Typography,
-  Button,
-} from "@ya.praktikum/react-developer-burger-ui-components";
+import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./profile.module.css";
 
 export const Profile = () => {
@@ -18,6 +16,7 @@ export const Profile = () => {
   const nav_link_style_active = `${styles.active} text text_type_main-medium`;
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { user } = useSelector((state) => state.user);
 
@@ -56,8 +55,9 @@ export const Profile = () => {
   };
 
   const loggingOut = () => {
+    navigate('/login');
+    console.log('log OUT')
     dispatch(logOut());
-    return true;
   };
 
   return (

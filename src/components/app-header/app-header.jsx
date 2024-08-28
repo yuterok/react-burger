@@ -53,7 +53,7 @@ const AppHeader = () => {
 
           <div className={styles.nav_section}>
             <CustomNavLink
-              link="/login"
+              link="/profile"
               text={userName ? userName : 'Личный кабинет'}
               Icon={ProfileIcon}
             />

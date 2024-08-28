@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux"
+import { useDispatch } from "react-redux";
 import { fetchRegister, fetchRegisterSuccess } from "../services/user/actions";
-import {isEmailValid} from "../utils/form-validation";
+import { isEmailValid } from "../utils/form-validation";
 
 import styles from "./login.module.css";
 import { Link } from "react-router-dom";
@@ -22,8 +22,6 @@ export const Register = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const url = "https://norma.nomoreparties.space/api/auth/register";
-
   const data = {
     email: email,
     password: password,
@@ -38,13 +36,12 @@ export const Register = () => {
       }
       return true;
     };
-    if (!validateForm() || (!isEmailValid(email))) {
+    if (!validateForm() || !isEmailValid(email)) {
       return;
     }
     dispatch(fetchRegister(data));
     if (fetchRegisterSuccess) {
-
-    navigate("/", { replace: true });
+      navigate("/", { replace: true });
     }
   };
 

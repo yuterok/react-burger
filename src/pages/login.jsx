@@ -1,7 +1,7 @@
-import { Link } from "react-router-dom";
-import {isEmailValid} from "../utils/form-validation";
+import { Link, useLocation } from "react-router-dom";
+import { isEmailValid } from "../utils/form-validation";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux"
+import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { fetchLogin } from "../services/user/actions";
 import { useSelector } from "react-redux";
@@ -18,32 +18,31 @@ export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { loginRequest, loginFailed } = useSelector(
-    (state) => state.user
-  );
+  const { loginRequest, loginFailed } = useSelector((state) => state.user);
 
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
 
   const data = {
-    email: email, 
-    password: password, 
-  }
+    email: email,
+    password: password,
+  };
   const login = async (e) => {
     e.preventDefault();
-    console.log(data)
     const validateForm = () => {
       if (!email || !password) {
         return false;
       }
       return true;
     };
-    if (!validateForm() || (!isEmailValid(email))) {
+    if (!validateForm() || !isEmailValid(email)) {
       return;
     }
     dispatch(fetchLogin(data));
     if (!loginRequest && !loginFailed) {
-    navigate("/", { replace: true });
+      const from = location.state?.from?.pathname || "/";
+      navigate(from, { replace: true });
     }
   };
 
@@ -51,8 +50,16 @@ export const Login = () => {
     <div className={styles.container}>
       <div className={styles.container_inner}>
         <h3 className="text text_type_main-medium">Вход</h3>
-        <EmailCustomInput value={email} setValue={setEmail} extraClass="mt-6 mb-6" />
-        <PasswordCustomInput value={password} setValue={setPassword}extraClass="mb-6" />
+        <EmailCustomInput
+          value={email}
+          setValue={setEmail}
+          extraClass="mt-6 mb-6"
+        />
+        <PasswordCustomInput
+          value={password}
+          setValue={setPassword}
+          extraClass="mb-6"
+        />
         <Button htmlType="button" type="primary" size="large" onClick={login}>
           Войти
         </Button>

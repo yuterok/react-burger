@@ -13,8 +13,6 @@ import { fetchOrder } from "../../services/order/actions";
 import {
   CurrencyIcon,
   ConstructorElement,
-  Typography,
-  Box,
   Button,
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -24,6 +22,7 @@ import { IngredientType } from "../../utils/types";
 import Modal from "../modal/modal";
 import OrderDetails from "./order-details/order-details";
 import { Placeholder } from "./constructor-placeholders/constructor-placeholders";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const { cart, bun } = useSelector((state) => state.cart);
@@ -149,7 +148,9 @@ CartIngredientItem.propTypes = {
 const Total = () => {
   const { cart, bun } = useSelector((state) => state.cart);
   const { isModalOpen, openModal, closeModal } = useModal();
+  const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const price = () => {
     let sum = 0;
@@ -167,9 +168,13 @@ const Total = () => {
   const orderIngredientsIDs = { ingredients };
 
   const orderProcess = () => {
-    openModal();
-    if (cart.length > 0) {
-      dispatch(fetchOrder(orderIngredientsIDs));
+    if (!user) {
+      navigate("/login", { state: { from: "/" } });
+    } else {
+      openModal();
+      if (cart.length > 0) {
+        dispatch(fetchOrder(orderIngredientsIDs));
+      }
     }
   };
 

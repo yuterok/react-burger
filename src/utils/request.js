@@ -53,6 +53,7 @@ export const fetchWithRefresh = async (url, options) => {
 };
 
 export const saveTokens = (accessToken, refreshToken) => {
-  localStorage.setItem("accessToken", accessToken.split("Bearer ")[1]);
+  // localStorage.setItem("accessToken", accessToken.split("Bearer ")[1]);
+  localStorage.setItem("accessToken", accessToken);
   localStorage.setItem("refreshToken", refreshToken);
 };

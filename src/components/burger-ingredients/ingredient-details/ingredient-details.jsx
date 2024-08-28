@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import styles from "./ingredient-details.module.css";
-import { Typography } from "@ya.praktikum/react-developer-burger-ui-components";
 import { IngredientType } from "../../../utils/types";
 
 const IngredientDetails = () => {

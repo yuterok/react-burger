@@ -6,21 +6,30 @@ import {
   FETCH_LOGIN_REQUEST,
   FETCH_LOGIN_SUCCESS,
   FETCH_LOGIN_FAILURE,
-  LOGOUT,
   UPDATE_PROFILE_REQUEST,
   UPDATE_PROFILE_SUCCESS,
   UPDATE_PROFILE_FAILURE,
+  LOGOUT_REQUEST,
+  LOGOUT_SUCCESS,
+  LOGOUT_FAILURE,
 } from "./actions";
 
 const initialState = {
   user: null,
+
   loginRequest: false,
   loginFailed: false,
+
   registerRequest: false,
   registerFailed: false,
+
   isAuthChecked: false,
+
   profileUpdateRequest: false,
   profileUpdateFailed: false,
+
+  logoutRequest: false,
+  logoutFailed: false,
 };
 
 export const userReducer = (state = initialState, action) => {
@@ -76,14 +85,26 @@ export const userReducer = (state = initialState, action) => {
         loginFailed: true,
       };
     }
-    case LOGOUT: {
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
+    case LOGOUT_REQUEST:
+      return {
+        ...state,
+        logoutRequest: true,
+        logoutFailed: false,
+      };
+    case LOGOUT_SUCCESS: {
       return {
         ...state,
         user: null,
+        logoutRequest: false,
+        logoutFailed: false,
       };
     }
+    case LOGOUT_FAILURE:
+      return {
+        ...state,
+        logoutRequest: false,
+        logoutFailed: true,
+      };
     case UPDATE_PROFILE_REQUEST: {
       return {
         ...state,

@@ -25,7 +25,6 @@ const IngredientItem = ({ ingredient }) => {
     item: ingredient,
     end: (item, monitor) => {
       if (monitor.didDrop()) {
-        const dropResult = monitor.getDropResult();
         if (item.type === "bun") {
           dispatch(replaceBun(item));
         } else {
@@ -45,7 +44,7 @@ const IngredientItem = ({ ingredient }) => {
     let count = 0;
     if (cart.find((item) => item._id === ingredient._id)) {
       cart.forEach((item) => {
-        if (item._id == ingredient._id) {
+        if (item._id === ingredient._id) {
           count += 1;
         }
       });

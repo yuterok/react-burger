@@ -31,10 +31,10 @@ export const ForgotPassword = () => {
           navigate("/reset-password", { replace: true });
         }
       } catch (error) {
-        if (error.message == "Invalid credentials provided") {
+        if (error.message === "Invalid credentials provided") {
           alert("Введены неверные данные");
         }
-        console.error("Registration failed:", error);
+        console.error("Password reset failed:", error);
       }
     }
   };

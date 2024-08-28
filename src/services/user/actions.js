@@ -15,6 +15,10 @@ export const UPDATE_PROFILE_REQUEST = "UPDATE_PROFILE_REQUEST";
 export const UPDATE_PROFILE_SUCCESS = "UPDATE_PROFILE_SUCCESS";
 export const UPDATE_PROFILE_FAILURE = "UPDATE_PROFILE_FAILURE";
 
+export const LOGOUT_REQUEST = "LOGOUT_REQUEST";
+export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
+export const LOGOUT_FAILURE = "LOGOUT_FAILURE";
+
 export const LOGOUT = "LOGOUT";
 
 export const fetchRegisterRequest = () => ({
@@ -45,9 +49,32 @@ export const fetchLoginFailure = (error) => ({
   payload: error,
 });
 
-export const logOut = () => ({
-  type: LOGOUT,
-});
+export const logOut = () => {
+  return async (dispatch) => {
+    dispatch({ type: LOGOUT_REQUEST });
+    try {
+      const refreshToken = localStorage.getItem("refreshToken");
+      const res = await request(`${BASE_URL}/auth/logout`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          token: refreshToken,
+        }),
+      });
+      if (res.success) {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        dispatch({ type: LOGOUT_SUCCESS });
+        console.log(res);
+      }
+    } catch (error) {
+      console.error("Ошибка при выходе из системы:", error);
+      dispatch({ type: LOGOUT_FAILURE });
+    }
+  };
+};
 
 export const setAuthChecked = (value) => ({
   type: SET_AUTH_CHECKED,
@@ -84,7 +111,7 @@ export const fetchRegister = (data) => {
       saveTokens(res.accessToken, res.refreshToken);
     } catch (error) {
       dispatch({ type: FETCH_REGISTER_FAILURE, error: error.message });
-      if (error.message == "User already exists") {
+      if (error.message === "User already exists") {
         alert("Пользователь с такими данными уже существует");
       }
       console.error("Registration failed:", error);
@@ -122,7 +149,7 @@ export const checkUserAuth = () => {
           method: "GET",
           headers: {
             "Content-Type": "application/json;charset=utf-8",
-            authorization: `Bearer ${accessToken}`,
+            "Authorization": accessToken
           },
         });
         dispatch(fetchLoginSuccess(res));
@@ -130,8 +157,6 @@ export const checkUserAuth = () => {
         dispatch(setAuthChecked(true));
       } catch (err) {
         console.log("Ошибка проверки токена", err);
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
         dispatch(logOut());
       }
     } else {
@@ -148,7 +173,7 @@ export const updateUserProfile = (data) => {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          Authorization: localStorage.getItem("accessToken")
         },
         body: JSON.stringify(data),
       });
