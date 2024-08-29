@@ -6,22 +6,20 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 export const CustomInput = ({
-  value = "",
-  setValue,
+  value,
   placeholder,
+  onChange,
   name,
   extraClass,
 }) => {
-  const inputRef = React.useRef(null);
   return (
     <Input
       type={"text"}
       placeholder={placeholder}
-      onChange={(e) => setValue(e.target.value)}
-      value={value || ""}
+      onChange={onChange}
+      value={value}
       name={name}
       error={false}
-      ref={inputRef}
       errorText={"Ошибка"}
       size={"default"}
       extraClass={extraClass}
@@ -30,10 +28,7 @@ export const CustomInput = ({
   );
 };
 
-export const EmailCustomInput = ({ extraClass, value = "", setValue }) => {
-  const onChange = (e) => {
-    setValue(e.target.value);
-  };
+export const EmailCustomInput = ({ extraClass, value, onChange }) => {
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       <EmailInput
@@ -49,15 +44,7 @@ export const EmailCustomInput = ({ extraClass, value = "", setValue }) => {
   );
 };
 
-export const PasswordCustomInput = ({
-  value = "",
-  setValue,
-  placeholder,
-  extraClass,
-}) => {
-  const onChange = (e) => {
-    setValue(e.target.value);
-  };
+export const PasswordCustomInput = ({ value, extraClass, onChange }) => {
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       <PasswordInput
@@ -66,18 +53,17 @@ export const PasswordCustomInput = ({
         name={"password"}
         extraClass={extraClass}
         error={false}
-        placeholder={placeholder}
         required={true}
       />
     </div>
   );
 };
 
-export const EditEmailInput = ({ value, setValue }) => {
+export const EditEmailInput = ({ value, onChange }) => {
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       <EmailInput
-        onChange={(e) => setValue(e)}
+        onChange={onChange}
         value={value || ""}
         name={"email"}
         placeholder={"Логин"}
@@ -87,11 +73,11 @@ export const EditEmailInput = ({ value, setValue }) => {
   );
 };
 
-export const EditPasswordInput = ({ value, setValue }) => {
+export const EditPasswordInput = ({ value, onChange }) => {
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       <PasswordInput
-        onChange={(e) => setValue(e)}
+        onChange={onChange}
         value={value || ""}
         name={"password"}
         icon="EditIcon"
@@ -100,7 +86,7 @@ export const EditPasswordInput = ({ value, setValue }) => {
   );
 };
 
-export const EditNameInput = ({ value, setValue }) => {
+export const EditNameInput = ({ value, onChange }) => {
   const inputRef = React.useRef(null);
 
   const onIconClick = () => {
@@ -117,7 +103,7 @@ export const EditNameInput = ({ value, setValue }) => {
       type={"text"}
       disabled={true}
       placeholder={"Имя"}
-      onChange={(e) => setValue(e)}
+      onChange={onChange}
       icon={"EditIcon"}
       value={value || ""}
       name={"name"}

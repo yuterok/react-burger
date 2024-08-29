@@ -1,4 +1,3 @@
-import { BASE_URL } from "../../utils/constants";
 import { request, fetchWithRefresh, saveTokens } from "../../utils/request";
 
 export const SET_AUTH_CHECKED = "SET_AUTH_CHECKED";
@@ -54,7 +53,7 @@ export const logOut = () => {
     dispatch({ type: LOGOUT_REQUEST });
     try {
       const refreshToken = localStorage.getItem("refreshToken");
-      const res = await request(`${BASE_URL}/auth/logout`, {
+      const res = await request("/auth/logout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -63,12 +62,10 @@ export const logOut = () => {
           token: refreshToken,
         }),
       });
-      if (res.success) {
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        dispatch({ type: LOGOUT_SUCCESS });
-        console.log(res);
-      }
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      dispatch({ type: LOGOUT_SUCCESS });
+      console.log(res);
     } catch (error) {
       console.error("Ошибка при выходе из системы:", error);
       dispatch({ type: LOGOUT_FAILURE });
@@ -99,7 +96,7 @@ export const fetchRegister = (data) => {
   return async (dispatch) => {
     dispatch({ type: FETCH_REGISTER_REQUEST });
     try {
-      const res = await request(`${BASE_URL}/auth/register`, {
+      const res = await request("/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -111,7 +108,7 @@ export const fetchRegister = (data) => {
       saveTokens(res.accessToken, res.refreshToken);
     } catch (error) {
       dispatch({ type: FETCH_REGISTER_FAILURE, error: error.message });
-      if (error.message === "User already exists") {
+      if (error == "Ошибка 403") {
         alert("Пользователь с такими данными уже существует");
       }
       console.error("Registration failed:", error);
@@ -123,7 +120,7 @@ export const fetchLogin = (data) => {
   return async (dispatch) => {
     dispatch({ type: FETCH_LOGIN_REQUEST });
     try {
-      const res = await request(`${BASE_URL}/auth/login`, {
+      const res = await request("/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -145,15 +142,13 @@ export const checkUserAuth = () => {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
       try {
-        const res = await fetchWithRefresh(`${BASE_URL}/auth/user`, {
-          method: "GET",
+        const res = await fetchWithRefresh("/auth/user", {
           headers: {
             "Content-Type": "application/json;charset=utf-8",
             Authorization: accessToken,
           },
         });
         dispatch(fetchLoginSuccess(res));
-        console.log(res);
         dispatch(setAuthChecked(true));
       } catch (err) {
         console.log("Ошибка проверки токена", err);
@@ -169,7 +164,7 @@ export const updateUserProfile = (data) => {
   return async (dispatch) => {
     dispatch(updateProfileRequest());
     try {
-      const res = await fetchWithRefresh(`${BASE_URL}/auth/user`, {
+      const res = await fetchWithRefresh("/auth/user", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

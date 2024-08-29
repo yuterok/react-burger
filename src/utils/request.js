@@ -1,21 +1,27 @@
 import { BASE_URL } from "./constants";
 
 export const checkResponse = (res) => {
-  if (!res.ok) {
-    return res.json().then((err) => {
-      err.statusCode = res.status;
-      return Promise.reject(err);
-    });
+  if (res.ok) {
+    return res.json();
   }
-  return res.json();
+  return Promise.reject(`Ошибка ${res.status}`);
 };
 
-export const request = (url, options) => {
-  return fetch(url, options).then(checkResponse);
+export const checkSuccess = (res) => {
+  if (res && res.success) {
+    return res;
+  }
+  return Promise.reject(`Ответ не success: ${res}`);
+};
+
+export const request = (endpoint, options) => {
+  return fetch(`${BASE_URL}${endpoint}`, options)
+    .then(checkResponse)
+    .then(checkSuccess);
 };
 
 export const refreshToken = () => {
-  return fetch(`${BASE_URL}/auth/token`, {
+  return fetch("/auth/token", {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=utf-8",
@@ -37,9 +43,8 @@ export const refreshToken = () => {
 
 export const fetchWithRefresh = async (url, options) => {
   try {
-    const res = await fetch(url, options);
-    console.log(res);
-    return await checkResponse(res);
+    const res = await request(url, options);
+    return res;
   } catch (err) {
     if (err.message === "jwt expired") {
       const refreshData = await refreshToken();

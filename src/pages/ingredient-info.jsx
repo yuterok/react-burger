@@ -3,10 +3,10 @@ import IngredientDetails from "../components/burger-ingredients/ingredient-detai
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
-import styles from './ingredient-info.module.css'
+import styles from "./ingredient-info.module.css";
 
 export const IngredientInfo = () => {
-  let id = useParams().id;
+  const id = useParams().id;
   const { items } = useSelector((state) => state.ingredients);
   const currentIngredient = items.find((item) => item._id === id);
   return (

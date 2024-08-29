@@ -10,6 +10,7 @@ import {
 } from "../components/ui-components/inputs";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./profile.module.css";
+import { useForm } from "../hooks/useForm";
 
 export const Profile = () => {
   const nav_link_style = `${styles.link} text text_type_main-medium`;
@@ -20,37 +21,32 @@ export const Profile = () => {
 
   const { user } = useSelector((state) => state.user);
 
-  const [formValues, setFormValues] = useState({
-    email: user.email,
+  const { values, handleChange, setValues } = useForm({
     name: user.name,
-    password: "",
-  });
-  const [originalValues, setOriginalValues] = useState({
     email: user.email,
-    name: user.name,
   });
 
   useEffect(() => {
-    if (user) {
-      setFormValues({ email: user.email, name: user.name, password: "" });
-      setOriginalValues({ email: user.email, name: user.name });
-    }
-  }, [user]);
+    setValues({
+      name: user.name,
+      email: user.email,
+      password: "",
+    });
+  }, [user, setValues]);
 
-  const handleSave = () => {
-    dispatch(updateUserProfile(formValues));
+  const handleSave = (e) => {
+    e.preventDefault();
+    if (values.name && values.email) {
+      dispatch(updateUserProfile(values));
+    }
   };
 
   const handleCancel = () => {
-    setFormValues({ ...originalValues, password: "" });
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormValues((prevValues) => ({
-      ...prevValues,
-      [name]: value,
-    }));
+    setValues({
+      name: user.name,
+      email: user.email,
+      password: "",
+    });
   };
 
   const loggingOut = () => {
@@ -87,16 +83,10 @@ export const Profile = () => {
         </p>
       </div>
       <div className={styles.info}>
-        <div className={styles.form}>
-          <EditNameInput value={formValues.name} setValue={handleInputChange} />
-          <EditEmailInput
-            value={formValues.email}
-            setValue={handleInputChange}
-          />
-          <EditPasswordInput
-            value={formValues.password}
-            setValue={handleInputChange}
-          />
+        <form onSubmit={handleSave} className={styles.form}>
+          <EditNameInput value={values.name} onChange={handleChange} />
+          <EditEmailInput value={values.email} onChange={handleChange} />
+          <EditPasswordInput value={values.password} onChange={handleChange} />
           <div className={styles.buttons}>
             <Button
               onClick={handleCancel}
@@ -106,16 +96,11 @@ export const Profile = () => {
             >
               Отмена
             </Button>
-            <Button
-              onClick={handleSave}
-              type="primary"
-              size="medium"
-              htmlType="button"
-            >
+            <Button type="primary" size="medium" htmlType="submit">
               Сохранить
             </Button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );

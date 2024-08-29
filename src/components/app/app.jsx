@@ -1,8 +1,9 @@
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchIngredients } from "../../services/ingredients/actions";
 import { checkUserAuth } from "../../services/user/actions";
+import Modal from "../modal/modal";
 
 import {
   HomePage,
@@ -15,8 +16,6 @@ import {
   Page404,
 } from "../../pages";
 
-import Modal from "../modal/modal";
-
 import styles from "./app.module.css";
 
 import AppHeader from "../app-header/app-header";
@@ -24,8 +23,9 @@ import IngredientDetails from "../burger-ingredients/ingredient-details/ingredie
 import { OnlyAuth, OnlyUnAuth } from "./protected-route";
 
 function App() {
-  let location = useLocation();
-  let state = location.state;
+  const location = useLocation();
+  const state = location.state;
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -39,6 +39,10 @@ function App() {
   const { itemsRequest, itemsFailed, items } = useSelector(
     (state) => state.ingredients
   );
+
+  const closeModal = () => {
+    navigate(-1);
+  };
 
   const { isAuthChecked } = useSelector((state) => state.user);
   return (
@@ -86,7 +90,7 @@ function App() {
                 <Route
                   path="/ingredients/:id"
                   element={
-                    <Modal>
+                    <Modal onClose={closeModal}>
                       <IngredientDetails />
                     </Modal>
                   }

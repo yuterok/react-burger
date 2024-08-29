@@ -1,4 +1,3 @@
-import { BASE_URL } from "../../utils/constants";
 import { request } from "../../utils/request";
 export const FETCH_ORDER_REQUEST = "FETCH_ORDER_REQUEST";
 export const FETCH_ORDER_SUCCESS = "FETCH_ORDER_SUCCESS";
@@ -22,16 +21,16 @@ export const fetchOrder = (data) => {
   return async (dispatch) => {
     dispatch({ type: FETCH_ORDER_REQUEST });
     try {
-      const res = await request(`${BASE_URL}/orders`, {
+      const res = await request("/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": localStorage.getItem("accessToken")
+          Authorization: localStorage.getItem("accessToken"),
         },
         body: JSON.stringify(data),
       });
       dispatch({ type: FETCH_ORDER_SUCCESS, payload: res });
-      console.log(res)
+      console.log(res);
     } catch (error) {
       dispatch({ type: FETCH_ORDER_FAILURE, error: error.message });
       console.log("Order fetch error: ", error);

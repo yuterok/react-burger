@@ -1,16 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useForm } from "../hooks/useForm";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./login.module.css";
 
-import { PasswordCustomInput, CustomInput } from "../components/ui-components/inputs";
+import {
+  PasswordCustomInput,
+  CustomInput,
+} from "../components/ui-components/inputs";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { request } from "../utils/request";
-import { BASE_URL } from "../utils/constants";
 
 export const ResetPassword = () => {
-  const [password, setPassword] = useState("");
-  const [code, setCode] = useState("");
+  const { values, handleChange } = useForm({ password: "", code: "" });
 
   const navigate = useNavigate();
 
@@ -20,31 +22,26 @@ export const ResetPassword = () => {
     }
   }, [navigate]);
 
-  const url = BASE_URL + "/password-reset/reset";
   const data = {
-    password: password,
-    token: code,
+    password: values.password,
+    token: values.code,
   };
 
-  const FetchResetPassword = async () => {
-    if (code && password) {
-      try {
-        const res = await request(url, {
-          method: "POST",
-          body: JSON.stringify(data),
-        });
-        if (res.success) {
-          localStorage.removeItem("resetPassword");
-          navigate("/login", { replace: true });
-        } else {
-          alert("Данные неверны!");
-        }
-      } catch (error) {
-        if (error.message === "Invalid credentials provided") {
-          alert("Введены неверные данные");
-        }
-        console.error("Failed:", error);
+  const FetchResetPassword = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await request("/password-reset/reset", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      localStorage.removeItem("resetPassword");
+      navigate("/login", { replace: true });
+    } catch (error) {
+      if (error.message === "Invalid credentials provided") {
+        alert("Введены неверные данные");
       }
+      console.error("Failed:", error);
     }
   };
 
@@ -52,27 +49,24 @@ export const ResetPassword = () => {
     <div className={styles.container}>
       <div className={styles.container_inner}>
         <h3 className="text text_type_main-medium">Восстановление пароля</h3>
-        <PasswordCustomInput
-          placeholder="Введите новый пароль"
-          extraClass="mt-6 mb-6"
-          value={password}
-          setValue={setPassword}
-        />
-        <CustomInput
-          name="sequre-code"
-          placeholder="Введите код из письма"
-          extraClass="mb-6"
-          value={code}
-          setValue={setCode}
-        />
-        <Button
-          onClick={FetchResetPassword}
-          htmlType="submit"
-          type="primary"
-          size="large"
-        >
-          Восстановить
-        </Button>
+        <form onSubmit={FetchResetPassword}>
+          <PasswordCustomInput
+            placeholder="Введите новый пароль"
+            extraClass="mt-6 mb-6"
+            value={values.password}
+            onChange={handleChange}
+          />
+          <CustomInput
+            name="code"
+            placeholder="Введите код из письма"
+            extraClass="mb-6"
+            value={values.code}
+            onChange={handleChange}
+          />
+          <Button htmlType="submit" type="primary" size="large">
+            Восстановить
+          </Button>
+        </form>
         <div className={`${styles.link_container} mt-20 mb-4`}>
           <p className="text text_type_main-default text_color_inactive">
             Вспомнили пароль?
