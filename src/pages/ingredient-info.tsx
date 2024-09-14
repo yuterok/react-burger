@@ -4,14 +4,15 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import styles from "./ingredient-info.module.css";
+import { useAppSelector } from "../services/store";
 
 export const IngredientInfo = () => {
   const id = useParams().id;
-  const { items } = useSelector((state) => state.ingredients);
+  const { items } = useAppSelector((state) => state.ingredients);
   const currentIngredient = items.find((item) => item._id === id);
   return (
     <div className={styles.container}>
-      <IngredientDetails ingredient={currentIngredient} />
+      <IngredientDetails />
     </div>
   );
 };

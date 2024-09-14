@@ -3,12 +3,13 @@ import { useSelector } from "react-redux";
 import styles from "./order-details.module.css";
 import { Preloader } from "../../ui-components/preloader";
 import doneImg from "../../../images/done.png";
+import { useAppSelector } from "../../../services/store";
 
 const OrderDetails = () => {
-  const { orderInfo, orderRequest, orderFailed } = useSelector(
+  const { orderInfo, orderRequest, orderFailed } = useAppSelector(
     (state) => state.order
   );
-  const { cart } = useSelector((state) => state.cart);
+  const { cart } = useAppSelector((state) => state.cart);
   return (
     <div className={styles.container}>
       {cart.length === 0 ? (

@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import styles from "./ingredient-details.module.css";
-import { IngredientType } from "../../../utils/types";
+// import { IngredientType } from "../../../utils/types";
 
 const IngredientDetails = () => {
   const id = useParams().id;
@@ -38,8 +38,8 @@ const IngredientDetails = () => {
   );
 };
 
-IngredientDetails.propTypes = {
-  ingredient: IngredientType,
-};
+// IngredientDetails.propTypes = {
+//   ingredient: IngredientType,
+// };
 
 export default IngredientDetails;

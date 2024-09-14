@@ -18,7 +18,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import styles from "./burger-constructor.module.css";
-import { IngredientType } from "../../utils/types";
+// import { IngredientType } from "../../utils/types";
 import Modal from "../modal/modal";
 import OrderDetails from "./order-details/order-details";
 import { Placeholder } from "./constructor-placeholders/constructor-placeholders";
@@ -138,12 +138,12 @@ const CartIngredientItem = ({
   );
 };
 
-CartIngredientItem.propTypes = {
-  ingredient: IngredientType,
-  index: PropTypes.number.isRequired,
-  moveIngredient: PropTypes.func.isRequired,
-  handleClose: PropTypes.func.isRequired,
-};
+// CartIngredientItem.propTypes = {
+//   ingredient: IngredientType,
+//   index: PropTypes.number.isRequired,
+//   moveIngredient: PropTypes.func.isRequired,
+//   handleClose: PropTypes.func.isRequired,
+// };
 
 const Total = () => {
   const { cart, bun } = useSelector((state) => state.cart);

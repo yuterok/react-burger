@@ -7,9 +7,16 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./app-header.module.css";
 import { NavLink } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { FC } from "react";
+import { useAppSelector } from "../../services/store";
 
-const CustomNavLink = ({ link, text, Icon }) => {
+interface CustomNavLinkProps {
+  link: string;
+  text: string;
+  Icon: any;
+}
+
+const CustomNavLink: FC<CustomNavLinkProps> = ({ link, text, Icon }) => {
   const nav_link_style = `${styles.nav_link} text text_type_main-default pl-5 pr-5 pb-5 pt-5`;
   const nav_link_style_active = `${styles.nav_link} ${styles.active} text text_type_main-default pl-5 pr-5 pb-5 pt-5`;
   return (
@@ -26,8 +33,8 @@ const CustomNavLink = ({ link, text, Icon }) => {
   );
 };
 
-const AppHeader = () => {
-  const { user } = useSelector((state) => state.user);
+const AppHeader: FC = () => {
+  const { user } = useAppSelector((state) => state.user);
   let userName;
   if (user) {
     userName = user.name;

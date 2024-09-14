@@ -4,13 +4,19 @@ import {
   FETCH_ORDER_FAILURE,
 } from "./actions";
 
-const initialState = {
+interface OrderState {
+  orderRequest: boolean;
+  orderFailed: boolean;
+  orderInfo: any;
+};
+
+const initialState: OrderState = {
   orderRequest: false,
   orderFailed: false,
   orderInfo: null,
 };
 
-export const orderReducer = (state = initialState, action) => {
+export const orderReducer = (state = initialState, action: any): OrderState => {
   switch (action.type) {
     case FETCH_ORDER_REQUEST: {
       return {

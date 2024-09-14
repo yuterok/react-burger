@@ -1,12 +1,19 @@
-import {FETCH_INGREDIENTS_REQUEST, FETCH_INGREDIENTS_SUCCESS, FETCH_INGREDIENTS_FAILURE} from './actions'
+import {IngredientType} from '../../utils/types';
 
-const initialState = {
+import {FETCH_INGREDIENTS_REQUEST, FETCH_INGREDIENTS_SUCCESS, FETCH_INGREDIENTS_FAILURE} from './actions';
+
+interface IngredientsState {
+    items: IngredientType[];
+    itemsRequest: boolean;
+    itemsFailed: boolean;
+}
+const initialState: IngredientsState = {
     items: [],
     itemsRequest: false,
     itemsFailed: false
 };
 
-const ingredientsReducer = (state = initialState, action) => {
+const ingredientsReducer = (state = initialState, action: any): IngredientsState => {
     switch (action.type){
         case FETCH_INGREDIENTS_REQUEST: {
             return {

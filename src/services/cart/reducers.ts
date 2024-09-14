@@ -1,3 +1,5 @@
+import {IngredientType} from '../../utils/types';
+
 import {
   ADD_INGREDIENT,
   DELETE_INGREDIENT,
@@ -6,12 +8,17 @@ import {
   EMPTY_CART,
 } from "./actions";
 
-const initialState = {
+interface CartState {
+  cart: IngredientType[];
+  bun: IngredientType | null;
+}
+
+const initialState: CartState = {
   cart: [],
   bun: null,
 };
 
-export const cartReducer = (state = initialState, action) => {
+export const cartReducer = (state = initialState, action: any): CartState => {
   switch (action.type) {
     case ADD_INGREDIENT: {
       return {
