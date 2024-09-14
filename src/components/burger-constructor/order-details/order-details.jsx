@@ -1,6 +1,7 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 import styles from "./order-details.module.css";
+import { Preloader } from "../../ui-components/preloader";
 import doneImg from "../../../images/done.png";
 
 const OrderDetails = () => {
@@ -10,14 +11,12 @@ const OrderDetails = () => {
   const { cart } = useSelector((state) => state.cart);
   return (
     <div className={styles.container}>
-      {cart.length == 0 ? (
+      {cart.length === 0 ? (
         <h1 className={`${styles.warning} text text_type_main-large mt-10`}>
           Заказ пуст. Добавьте ингредиенты
         </h1>
       ) : orderRequest ? (
-        <h1 className={`${styles.warning} text text_type_main-large mt-10`}>
-          Загрузка...
-        </h1>
+        <Preloader />
       ) : orderFailed ? (
         <h1 className={`${styles.warning} text text_type_main-large mt-10`}>
           Ошибка загрузки данных с сервера

@@ -1,4 +1,3 @@
-import { BASE_URL } from "../../components/app/app";
 import { request } from "../../utils/request";
 
 export const FETCH_INGREDIENTS_REQUEST = "FETCH_INGREDIENTS_REQUEST";
@@ -23,7 +22,7 @@ export const fetchIngredients = () => {
   return async (dispatch) => {
     dispatch({ type: FETCH_INGREDIENTS_REQUEST });
     try {
-      const data = await request(`${BASE_URL}/ingredients`);
+      const data = await request("/ingredients");
       dispatch({ type: FETCH_INGREDIENTS_SUCCESS, payload: data.data });
     } catch (error) {
       dispatch({ type: FETCH_INGREDIENTS_FAILURE, error: error.message });

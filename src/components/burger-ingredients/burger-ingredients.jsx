@@ -2,10 +2,7 @@ import { useState, useEffect } from "react";
 
 import { useRef } from "react";
 
-import {
-  Tab,
-  Typography,
-} from "@ya.praktikum/react-developer-burger-ui-components";
+import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import styles from "./burger-ingredients.module.css";
 import IngredientsList from "./ingredient-list/ingredient-list";

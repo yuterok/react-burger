@@ -1,0 +1,22 @@
+.container{
+    height: 85vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+.container_inner{
+    margin: auto;
+    text-align: center;
+}
+
+.link{
+    text-decoration: none;
+    color: var(--interface-accent);
+}
+
+.link_container{
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}

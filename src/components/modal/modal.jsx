@@ -49,7 +49,7 @@ const Modal = ({ onClose, children }) => {
 };
 
 Modal.propTypes = {
-  onClose: PropTypes.func.isRequired,
+  onClose: PropTypes.func,
   children: PropTypes.node.isRequired,
 };
 

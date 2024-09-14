@@ -1,8 +1,12 @@
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import styles from "./ingredient-details.module.css";
-import { Typography } from "@ya.praktikum/react-developer-burger-ui-components";
 import { IngredientType } from "../../../utils/types";
 
-const IngredientDetails = ({ ingredient }) => {
+const IngredientDetails = () => {
+  const id = useParams().id;
+  const { items } = useSelector((state) => state.ingredients);
+  const ingredient = items.find((item) => item._id === id);
   return (
     <div className={styles.container}>
       <h2 className={styles.title + " text text_type_main-large"}>

@@ -1,5 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useDrag } from "react-dnd";
+import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import {
   Counter,
   CurrencyIcon,
@@ -7,20 +9,14 @@ import {
 
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import Modal from "../../modal/modal";
-import { IngredientType } from "../../../utils/types";
-import PropTypes from "prop-types";
 import styles from "./ingredient-item.module.css";
 import { useModal } from "../../../hooks/useModal";
 
-import {
-  setCurrentIngredient,
-  clearCurrentIngredient,
-} from "../../../services/currentIngredient/actions";
 import { addIngredient, replaceBun } from "../../../services/cart/actions";
 
 const IngredientItem = ({ ingredient }) => {
-  const { isModalOpen, openModal, closeModal } = useModal();
-  const { currentIngredient } = useSelector((state) => state.currentIngredient);
+  const { isModalOpen } = useModal();
+  const location = useLocation();
 
   const dispatch = useDispatch();
 
@@ -29,7 +25,6 @@ const IngredientItem = ({ ingredient }) => {
     item: ingredient,
     end: (item, monitor) => {
       if (monitor.didDrop()) {
-        const dropResult = monitor.getDropResult();
         if (item.type === "bun") {
           dispatch(replaceBun(item));
         } else {
@@ -43,23 +38,13 @@ const IngredientItem = ({ ingredient }) => {
   });
   const opacity = isDragging ? 0.5 : 1;
 
-  const setCurrentItem = () => {
-    dispatch(setCurrentIngredient(ingredient));
-    openModal();
-  };
-
-  const clearCurrentItem = () => {
-    dispatch(clearCurrentIngredient());
-    closeModal();
-  };
-
   const { cart, bun } = useSelector((state) => state.cart);
 
   const countIngredients = (ingredient) => {
     let count = 0;
     if (cart.find((item) => item._id === ingredient._id)) {
       cart.forEach((item) => {
-        if (item._id == ingredient._id) {
+        if (item._id === ingredient._id) {
           count += 1;
         }
       });
@@ -71,11 +56,13 @@ const IngredientItem = ({ ingredient }) => {
   };
 
   return (
-    <li
+    <Link
+      key={ingredient._id}
+      to={`/ingredients/${ingredient._id}`}
       ref={dragRef}
       className={styles.ingredient_block + " pl-4"}
-      onClick={setCurrentItem}
       style={{ opacity: opacity }}
+      state={{ backgroundLocation: location }}
     >
       {countIngredients(ingredient) > 0 ? (
         <Counter
@@ -94,16 +81,12 @@ const IngredientItem = ({ ingredient }) => {
       </span>
       <p className="text text_type_main-default">{ingredient.name}</p>
       {isModalOpen && (
-        <Modal onClose={clearCurrentItem}>
-          <IngredientDetails ingredient={currentIngredient} />
+        <Modal>
+          <IngredientDetails />
         </Modal>
       )}
-    </li>
+    </Link>
   );
-};
-
-IngredientItem.propTypes = {
-  ingredient: PropTypes.shape(IngredientType).isRequired,
 };
 
 export default IngredientItem;

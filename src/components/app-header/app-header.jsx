@@ -1,56 +1,59 @@
 import { Logo } from "@ya.praktikum/react-developer-burger-ui-components";
+
 import {
   ListIcon,
   BurgerIcon,
   ProfileIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./app-header.module.css";
+import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-const NavLink = ({ isActive, link, text, Icon }) => {
+const CustomNavLink = ({ link, text, Icon }) => {
+  const nav_link_style = `${styles.nav_link} text text_type_main-default pl-5 pr-5 pb-5 pt-5`;
+  const nav_link_style_active = `${styles.nav_link} ${styles.active} text text_type_main-default pl-5 pr-5 pb-5 pt-5`;
   return (
-    <a
-      href={link}
-      className={`${
-        styles.nav_link
-      } text text_type_main-default pl-5 pr-5 pb-5 pt-5 ${
-        isActive ? styles.active : ""
-      }`}
+    <NavLink
+      to={link}
+      end
+      className={({ isActive }) =>
+        isActive ? `${nav_link_style_active}` : `${nav_link_style}`
+      }
     >
       <Icon type="primary" />
       {text}
-    </a>
+    </NavLink>
   );
 };
 
 const AppHeader = () => {
+  const { user } = useSelector((state) => state.user);
+  let userName;
+  if (user) {
+    userName = user.name;
+  }
   return (
     <>
       <header className={styles.header + " p-4"}>
         <div className={styles.container}>
           <div className={styles.nav_section}>
-            <NavLink
-              isActive={true}
-              link="#"
-              text="Конструктор"
-              Icon={BurgerIcon}
-            />
-            <NavLink
-              isActive={false}
-              link="#"
+            <CustomNavLink link="/" text="Конструктор" Icon={BurgerIcon} />
+            <CustomNavLink
+              link="/profile/orders"
               text="Лента заказов"
               Icon={ListIcon}
             />
           </div>
-          <div className={styles.logo}>
+
+          <NavLink to="/">
             {" "}
             <Logo />
-          </div>
+          </NavLink>
 
           <div className={styles.nav_section}>
-            <NavLink
-              isActive={false}
-              link="#"
-              text="Личный кабинет"
+            <CustomNavLink
+              link="/profile"
+              text={userName ? userName : "Личный кабинет"}
               Icon={ProfileIcon}
             />
           </div>
