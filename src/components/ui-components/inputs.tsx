@@ -1,11 +1,18 @@
-import React from "react";
+import React, { FC } from "react";
 import {
   EmailInput,
   PasswordInput,
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-export const CustomInput = ({
+interface IInput {
+  value?: string;
+  placeholder?: string;
+  name?: string;
+  extraClass?: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+export const CustomInput: FC<IInput> = ({
   value,
   placeholder,
   onChange,
@@ -17,18 +24,24 @@ export const CustomInput = ({
       type={"text"}
       placeholder={placeholder}
       onChange={onChange}
-      value={value}
+      value={value || ""}
       name={name}
       error={false}
       errorText={"Ошибка"}
       size={"default"}
       extraClass={extraClass}
       required={true}
+      onPointerEnterCapture={undefined}
+      onPointerLeaveCapture={undefined}
     />
   );
 };
 
-export const EmailCustomInput = ({ extraClass, value, onChange }) => {
+export const EmailCustomInput: FC<IInput> = ({
+  extraClass,
+  value,
+  onChange,
+}) => {
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       <EmailInput
@@ -44,7 +57,11 @@ export const EmailCustomInput = ({ extraClass, value, onChange }) => {
   );
 };
 
-export const PasswordCustomInput = ({ value, extraClass, onChange }) => {
+export const PasswordCustomInput: FC<IInput> = ({
+  value,
+  extraClass,
+  onChange,
+}) => {
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       <PasswordInput
@@ -59,7 +76,7 @@ export const PasswordCustomInput = ({ value, extraClass, onChange }) => {
   );
 };
 
-export const EditEmailInput = ({ value, onChange }) => {
+export const EditEmailInput: FC<IInput> = ({ value, onChange }) => {
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       <EmailInput
@@ -73,7 +90,7 @@ export const EditEmailInput = ({ value, onChange }) => {
   );
 };
 
-export const EditPasswordInput = ({ value, onChange }) => {
+export const EditPasswordInput: FC<IInput> = ({ value, onChange }) => {
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       <PasswordInput
@@ -86,16 +103,18 @@ export const EditPasswordInput = ({ value, onChange }) => {
   );
 };
 
-export const EditNameInput = ({ value, onChange }) => {
-  const inputRef = React.useRef(null);
+export const EditNameInput: FC<IInput> = ({ value, onChange }) => {
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const onIconClick = () => {
-    if (inputRef.current.disabled === false) {
+  const onIconClick = (): void => {
+    if (inputRef.current && inputRef.current.disabled === false) {
       inputRef.current.disabled = true;
-      setTimeout(() => inputRef.current.focus(), 0);
-      inputRef.current.success = true;
+      setTimeout(() => inputRef.current?.focus(), 0);
+      (inputRef.current as any).success = true;
     } else {
-      inputRef.current.disabled = false;
+      if (inputRef.current) {
+        inputRef.current.disabled = false;
+      }
     }
   };
   return (
@@ -112,6 +131,8 @@ export const EditNameInput = ({ value, onChange }) => {
       onIconClick={onIconClick}
       errorText={"Ошибка"}
       size={"default"}
+      onPointerEnterCapture={undefined}
+      onPointerLeaveCapture={undefined}
     />
   );
 };

@@ -5,31 +5,32 @@ import styles from "./login.module.css";
 import { EmailCustomInput } from "../components/ui-components/inputs";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import { request } from "../utils/request";
+import { request, getErrorMessage } from "../utils/request";
 import { isEmailValid } from "../utils/form-validation";
 
 export const ForgotPassword = () => {
-  const { values, handleChange } = useForm({ email: '' });
+  const { values, handleChange } = useForm({ email: "" });
   const navigate = useNavigate();
 
   const data = {
     email: values.email,
   };
 
-  const FetchForgotPassword = async (e) => {
+  const FetchForgotPassword = async (e: React.FormEvent<HTMLFormElement>) => {
+    console.log(e);
     e.preventDefault();
     if (isEmailValid(values.email)) {
       try {
-        const res = await request('/password-reset', {
+        const res = await request("/password-reset", {
           method: "POST",
-          headers: {'Content-Type': 'application/json'},
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data),
         });
         console.log(res);
-          localStorage.setItem("resetPassword", true);
-          navigate("/reset-password", { replace: true });
+        localStorage.setItem("resetPassword", "true");
+        navigate("/reset-password", { replace: true });
       } catch (error) {
-        if (error.message === "Invalid credentials provided") {
+        if (getErrorMessage(error) === "Invalid credentials provided") {
           alert("Введены неверные данные");
         }
         console.error("Password reset failed:", error);
@@ -42,18 +43,14 @@ export const ForgotPassword = () => {
       <div className={styles.container_inner}>
         <h3 className="text text_type_main-medium">Восстановление пароля</h3>
         <form onSubmit={FetchForgotPassword}>
-        <EmailCustomInput
-          value={values.email}
-          onChange={handleChange}
-          extraClass="mt-6 mb-6"
-        />
-        <Button
-          htmlType="submit"
-          type="primary"
-          size="large"
-        >
-          Восстановить
-        </Button>
+          <EmailCustomInput
+            value={values.email}
+            onChange={handleChange}
+            extraClass="mt-6 mb-6"
+          />
+          <Button htmlType="submit" type="primary" size="large">
+            Восстановить
+          </Button>
         </form>
 
         <div className={`${styles.link_container} mt-20 mb-4`}>
@@ -71,5 +68,3 @@ export const ForgotPassword = () => {
     </div>
   );
 };
-
-

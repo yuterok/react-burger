@@ -1,8 +1,6 @@
 import { useModal } from "../../hooks/useModal";
-import PropTypes from "prop-types";
 import { useDrop, useDrag } from "react-dnd";
-import { useDispatch, useSelector } from "react-redux";
-import { useRef } from "react";
+import { FC, useRef } from "react";
 import {
   deleteIngredient,
   emptyCart,
@@ -18,27 +16,28 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import styles from "./burger-constructor.module.css";
-// import { IngredientType } from "../../utils/types";
 import Modal from "../modal/modal";
 import OrderDetails from "./order-details/order-details";
 import { Placeholder } from "./constructor-placeholders/constructor-placeholders";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../services/store";
+import { IngredientType, IUser } from "../../utils/types";
 
 const Cart = () => {
-  const { cart, bun } = useSelector((state) => state.cart);
+  const { cart, bun } = useAppSelector((state) => state.cart);
 
   const [, dropRef] = useDrop({
     accept: ["bun", "ingredient"],
     drop: (item) => ({ name: "BurgerConstructor" }),
   });
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const handleDeleteIngredient = (key) => {
+  const handleDeleteIngredient = (key: string | undefined): void => {
     dispatch(deleteIngredient(key));
   };
 
-  const moveIngredientHandler = (dragIndex, dropIndex) => {
+  const moveIngredientHandler = (dragIndex: number, dropIndex: number) => {
     dispatch(moveIngredient(dragIndex, dropIndex));
   };
 
@@ -86,18 +85,24 @@ const Cart = () => {
     </div>
   );
 };
+interface ICartIngredientItem {
+  ingredient: IngredientType;
+  handleClose: (id: string | undefined) => void;
+  index: number;
+  moveIngredient: (dragIndex: number, dropIndex: number) => void;
+}
 
-const CartIngredientItem = ({
+const CartIngredientItem: FC<ICartIngredientItem> = ({
   ingredient,
   handleClose,
   index,
   moveIngredient,
 }) => {
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement | null>(null);
 
   const [, drop] = useDrop({
     accept: "ingredient",
-    hover(item, monitor) {
+    hover(item: { index: number }, monitor: any) {
       if (!ref.current) return;
       const dragIndex = item.index;
       const dropIndex = index;
@@ -105,11 +110,16 @@ const CartIngredientItem = ({
       if (dragIndex === dropIndex) return;
 
       moveIngredient(dragIndex, dropIndex);
-      item.index = dropIndex;
+      // item.index = dropIndex; теперь вылезает ошибка, не могу исправить
+      // Object.assign(item, { index: dropIndex });
     },
   });
 
-  const [{ isDragging }, drag] = useDrag({
+  const [{ isDragging }, drag] = useDrag<
+    { index: number },
+    unknown,
+    { isDragging: boolean }
+  >({
     type: "ingredient",
     item: { index },
     collect: (monitor) => ({
@@ -138,36 +148,31 @@ const CartIngredientItem = ({
   );
 };
 
-// CartIngredientItem.propTypes = {
-//   ingredient: IngredientType,
-//   index: PropTypes.number.isRequired,
-//   moveIngredient: PropTypes.func.isRequired,
-//   handleClose: PropTypes.func.isRequired,
-// };
-
-const Total = () => {
-  const { cart, bun } = useSelector((state) => state.cart);
+const Total: FC = () => {
+  const { cart, bun } = useAppSelector((state) => state.cart);
   const { isModalOpen, openModal, closeModal } = useModal();
-  const { user } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
+  const { user } = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const price = () => {
-    let sum = 0;
-    cart.forEach((item) => {
-      sum += item.price;
-    });
-    sum += bun.price * 2;
+  const price = (): number => {
+    let sum: number = 0;
+    if (bun !== null && cart.length > 0) {
+      cart.forEach((item) => {
+        sum += item.price;
+      });
+      sum += bun.price * 2;
+    }
     return sum;
   };
 
-  const ingredients = cart.map(function (item) {
+  const ingredients: string[] = cart.map(function (item) {
     return item._id;
   });
 
-  const orderIngredientsIDs = { ingredients };
+  const orderIngredientsIDs: { ingredients: string[] } = { ingredients };
 
-  const orderProcess = () => {
+  const orderProcess = (): void => {
     if (!user) {
       navigate("/login", { state: { from: "/" } });
     } else {
@@ -178,10 +183,11 @@ const Total = () => {
     }
   };
 
-  const closing = () => {
+  const closing = (): void => {
     closeModal();
     dispatch(emptyCart());
   };
+
   return (
     <div className={styles.total}>
       {bun && (
@@ -210,7 +216,7 @@ const Total = () => {
   );
 };
 
-const BurgerConstructor = () => {
+const BurgerConstructor: FC = () => {
   return (
     <div className={styles.container}>
       <Cart />

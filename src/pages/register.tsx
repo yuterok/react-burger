@@ -12,6 +12,7 @@ import {
   CustomInput,
   PasswordCustomInput,
 } from "../components/ui-components/inputs";
+import { useAppDispatch } from "../services/store";
 
 export const Register = () => {
   const { values, handleChange } = useForm({
@@ -20,7 +21,7 @@ export const Register = () => {
     password: "",
   });
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const data = {
     email: values.email,
@@ -28,7 +29,7 @@ export const Register = () => {
     name: values.name,
   };
 
-  const register = async (e) => {
+  const register = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!isEmailValid(values.email)) {
       return;

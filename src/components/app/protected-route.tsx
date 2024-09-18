@@ -1,8 +1,14 @@
-import { useSelector } from "react-redux";
+import { ReactNode } from "react";
 import { useLocation, Navigate } from "react-router-dom";
+import { useAppSelector } from "../../services/store";
 
-const ProtectedRoute = ({ onlyUnAuth = false, component }) => {
-  const { isAuthChecked, user } = useSelector((state) => state.user);
+interface IProtectedRoute {
+  onlyUnAuth?: boolean;
+  component: ReactNode;
+}
+
+const ProtectedRoute = ({ onlyUnAuth = false, component }: IProtectedRoute): JSX.Element | null => {
+  const { isAuthChecked, user } = useAppSelector((state) => state.user);
   const location = useLocation();
 
   if (!isAuthChecked) {
@@ -18,11 +24,11 @@ const ProtectedRoute = ({ onlyUnAuth = false, component }) => {
     return <Navigate to="/login" state={{ from: location }} />;
   }
 
-  return component;
+  return <>{component}</>;
 };
 
 export const OnlyAuth = ProtectedRoute;
 
-export const OnlyUnAuth = ({ component }) => (
+export const OnlyUnAuth = ({ component }: { component: ReactNode }): JSX.Element | null => (
   <ProtectedRoute onlyUnAuth={true} component={component} />
 );

@@ -1,17 +1,19 @@
-
 export interface IngredientType {
-  _id: string;
-  name: string;
-  type: 'bun' | 'sauce' | 'main';
-  price: number;
-  image: string;
+  readonly _id: string;
+  readonly name: string;
+  readonly type: "bun" | "sauce" | "main";
+  readonly calories: number;
+  readonly proteins: number;
+  readonly fat: number;
+  readonly carbohydrates: number;
+  readonly price: number;
+  readonly image: string;
+  readonly image_mobile: string;
+  readonly image_large: string;
   key?: string;
 }
 
-// export const IngredientType = PropTypes.shape({
-//   _id: PropTypes.string,
-//   name: PropTypes.string,
-//   type: PropTypes.string,
-//   image: PropTypes.string,
-//   price: PropTypes.number,
-// });
+export interface IUser {
+  name: string;
+  email: string;
+}

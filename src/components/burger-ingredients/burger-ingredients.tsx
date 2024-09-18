@@ -1,16 +1,18 @@
-import { useState, useEffect } from "react";
-
-import { useRef } from "react";
-
+import { useState, useEffect, FC, useRef } from "react";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import styles from "./burger-ingredients.module.css";
 import IngredientsList from "./ingredient-list/ingredient-list";
 
-const TabIngredients = ({ currentTab, setCurrentTab }) => {
-  const handleTabClick = (value) => {
+interface ITabIngredients {
+  currentTab: string;
+  setCurrentTab: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const TabIngredients: FC<ITabIngredients> = ({ currentTab, setCurrentTab }) => {
+  const handleTabClick = (value: string): void => {
     setCurrentTab(value);
-    document.getElementById(value).scrollIntoView({ behavior: "smooth" });
+    document.getElementById(value)?.scrollIntoView({ behavior: "smooth" });
   };
   return (
     <div className={styles.tabs}>
@@ -42,17 +44,17 @@ const TabIngredients = ({ currentTab, setCurrentTab }) => {
   );
 };
 
-const BurgerIngredients = () => {
+const BurgerIngredients: FC = () => {
   const [currentTab, setCurrentTab] = useState("bun");
 
-  const bunRef = useRef(null);
-  const sauceRef = useRef(null);
-  const mainRef = useRef(null);
+  const bunRef = useRef<HTMLDivElement>(null);
+  const sauceRef = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLDivElement>(null);
 
-  const handleScroll = () => {
-    const bunPosition = bunRef.current.getBoundingClientRect().top;
-    const saucePosition = sauceRef.current.getBoundingClientRect().top;
-    const mainPosition = mainRef.current.getBoundingClientRect().top;
+  const handleScroll = (): void => {
+    const bunPosition = bunRef.current?.getBoundingClientRect().top || 0;
+    const saucePosition = sauceRef.current?.getBoundingClientRect().top || 0;
+    const mainPosition = mainRef.current?.getBoundingClientRect().top || 0;
 
     const offset = 300;
 
@@ -67,10 +69,10 @@ const BurgerIngredients = () => {
 
   useEffect(() => {
     const container = document.getElementById("ingredients-container");
-    container.addEventListener("scroll", handleScroll);
+    container?.addEventListener("scroll", handleScroll);
 
     return () => {
-      container.removeEventListener("scroll", handleScroll);
+      container?.removeEventListener("scroll", handleScroll);
     };
   }, []);
 

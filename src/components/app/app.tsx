@@ -1,9 +1,14 @@
-import { Routes, Route, useLocation, useNavigate, Location } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import {
+  Routes,
+  Route,
+  useLocation,
+  useNavigate,
+  Location,
+} from "react-router-dom";
 import { useEffect } from "react";
 import { fetchIngredients } from "../../services/ingredients/actions";
 import { checkUserAuth } from "../../services/user/actions";
-import { AppDispatch, RootState, useAppSelector } from "../../services/store";
+import { useAppDispatch, useAppSelector } from "../../services/store";
 import Modal from "../modal/modal";
 
 import {
@@ -27,10 +32,10 @@ interface LocationState {
   backgroundLocation?: Location;
 }
 function App() {
-  const location = useLocation() as Location & { state: LocationState}
+  const location = useLocation() as Location & { state: LocationState };
   const state = location.state;
   const navigate = useNavigate();
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(checkUserAuth());
@@ -40,7 +45,9 @@ function App() {
     dispatch(fetchIngredients());
   }, []);
 
-  const { itemsRequest, itemsFailed, items } = useAppSelector((state) => state.ingredients)
+  const { itemsRequest, itemsFailed, items } = useAppSelector(
+    (state) => state.ingredients
+  );
 
   const closeModal = () => {
     navigate(-1);

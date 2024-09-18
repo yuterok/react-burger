@@ -2,7 +2,7 @@ import { FC } from "react";
 import styles from "./constructor-placeholders.module.css";
 
 interface PlaceholderProps {
-  form: 'top' | 'bottom';
+  form: 'top' | 'bottom' | 'ingredient';
 }
 
 export const Placeholder: FC<PlaceholderProps> = ({ form }) => {

@@ -1,6 +1,5 @@
-import { useEffect, useMemo } from "react";
+import { FC, useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
-import PropTypes from "prop-types";
 
 import styles from "./modal.module.css";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -8,19 +7,23 @@ import ModalOverlay from "./modal-overlay/modal-overlay";
 
 const modalRoot = document.getElementById("react-modals");
 
-const Modal = ({ onClose, children }) => {
+interface IModal {
+  onClose: () => void;
+  children?: React.ReactNode;
+}
+const Modal:FC<IModal> = ({ onClose, children }) => {
   const element = useMemo(() => document.createElement("div"), []);
   element.classList.add(styles.modal_wrapper);
 
   useEffect(() => {
-    modalRoot.appendChild(element);
+    modalRoot?.appendChild(element);
     return () => {
-      modalRoot.removeChild(element);
+      modalRoot?.removeChild(element);
     };
   }, [element]);
 
   useEffect(() => {
-    const handleEscape = (e) => {
+    const handleEscape = (e: KeyboardEvent): void => {
       if (e.key === "Escape") {
         onClose();
       }
@@ -29,7 +32,7 @@ const Modal = ({ onClose, children }) => {
     return () => window.removeEventListener("keydown", handleEscape);
   }, [onClose]);
 
-  const handleClick = (e) => {
+  const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onClose();
   };
@@ -48,9 +51,5 @@ const Modal = ({ onClose, children }) => {
   );
 };
 
-Modal.propTypes = {
-  onClose: PropTypes.func,
-  children: PropTypes.node.isRequired,
-};
 
 export default Modal;

@@ -1,3 +1,4 @@
+import { IUser } from './../../utils/types';
 import {
   SET_AUTH_CHECKED,
   FETCH_REGISTER_REQUEST,
@@ -15,7 +16,7 @@ import {
 } from "./actions";
 
 interface UserState {
-  user: any | null;
+  user: IUser | null;
   loginRequest: boolean;
   loginFailed: boolean;
   registerRequest: boolean;

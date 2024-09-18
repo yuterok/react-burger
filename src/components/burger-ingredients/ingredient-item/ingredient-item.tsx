@@ -1,4 +1,3 @@
-import { useSelector, useDispatch } from "react-redux";
 import { useDrag } from "react-dnd";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -13,17 +12,24 @@ import styles from "./ingredient-item.module.css";
 import { useModal } from "../../../hooks/useModal";
 
 import { addIngredient, replaceBun } from "../../../services/cart/actions";
+import { FC } from "react";
+import { useAppDispatch, useAppSelector } from "../../../services/store";
+import { IngredientType } from "../../../utils/types";
 
-const IngredientItem = ({ ingredient }) => {
-  const { isModalOpen } = useModal();
+const IngredientItem: FC<IngredientType> = (ingredient) => {
+  const { isModalOpen, closeModal } = useModal();
+
+  const closing = (): void => {
+    closeModal();
+  };
   const location = useLocation();
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [{ isDragging }, dragRef] = useDrag({
     type: ingredient.type === "bun" ? "bun" : "ingredient",
     item: ingredient,
-    end: (item, monitor) => {
+    end: (item: IngredientType, monitor: any) => {
       if (monitor.didDrop()) {
         if (item.type === "bun") {
           dispatch(replaceBun(item));
@@ -38,9 +44,9 @@ const IngredientItem = ({ ingredient }) => {
   });
   const opacity = isDragging ? 0.5 : 1;
 
-  const { cart, bun } = useSelector((state) => state.cart);
+  const { cart, bun } = useAppSelector((state) => state.cart);
 
-  const countIngredients = (ingredient) => {
+  const countIngredients = (ingredient: IngredientType): number => {
     let count = 0;
     if (cart.find((item) => item._id === ingredient._id)) {
       cart.forEach((item) => {
@@ -81,7 +87,7 @@ const IngredientItem = ({ ingredient }) => {
       </span>
       <p className="text text_type_main-default">{ingredient.name}</p>
       {isModalOpen && (
-        <Modal>
+        <Modal onClose={closing}>
           <IngredientDetails />
         </Modal>
       )}

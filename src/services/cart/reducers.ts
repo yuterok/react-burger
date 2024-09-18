@@ -1,4 +1,4 @@
-import {IngredientType} from '../../utils/types';
+import { IngredientType } from "../../utils/types";
 
 import {
   ADD_INGREDIENT,
@@ -41,7 +41,9 @@ export const cartReducer = (state = initialState, action: any): CartState => {
     case MOVE_INGREDIENT: {
       const { dragIndex, dropIndex } = action.payload;
       const newCart = [...state.cart];
-      newCart.splice(dragIndex, 0, newCart.splice(dropIndex, 1)[0]);
+      // newCart.splice(dragIndex, 0, newCart.splice(dropIndex, 1)[0]);
+      const [movedItem] = newCart.splice(dragIndex, 1);
+      newCart.splice(dropIndex, 0, movedItem);
 
       return {
         ...state,

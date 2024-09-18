@@ -1,9 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { useForm } from "../hooks/useForm";
 import { fetchLogin } from "../services/user/actions";
-import { useSelector } from "react-redux";
 import { isEmailValid } from "../utils/form-validation";
 import styles from "./login.module.css";
 
@@ -12,21 +10,23 @@ import {
   PasswordCustomInput,
 } from "../components/ui-components/inputs";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
+import { useAppDispatch, useAppSelector } from "../services/store";
+import { FC } from "react";
 
-export const Login = () => {
+export const Login: FC = () => {
   const { values, handleChange } = useForm({ email: "", password: "" });
 
-  const { loginRequest, loginFailed } = useSelector((state) => state.user);
+  const { loginRequest, loginFailed } = useAppSelector((state) => state.user);
 
   const navigate = useNavigate();
   const location = useLocation();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const data = {
     email: values.email,
     password: values.password,
   };
-  const login = async (e) => {
+  const login = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!isEmailValid(values.email)) {
       return;

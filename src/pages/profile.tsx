@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import { useEffect, FC } from "react";
 import { NavLink } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logOut, updateUserProfile } from "../services/user/actions";
 import {
@@ -11,45 +10,46 @@ import {
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./profile.module.css";
 import { useForm } from "../hooks/useForm";
+import { useAppDispatch, useAppSelector } from "../services/store";
 
-export const Profile = () => {
-  const nav_link_style = `${styles.link} text text_type_main-medium`;
-  const nav_link_style_active = `${styles.active} text text_type_main-medium`;
+export const Profile: FC = () => {
+  const nav_link_style: string = `${styles.link} text text_type_main-medium`;
+  const nav_link_style_active: string = `${styles.active} text text_type_main-medium`;
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { user } = useSelector((state) => state.user);
+  const { user } = useAppSelector((state) => state.user);
 
   const { values, handleChange, setValues } = useForm({
-    name: user.name,
-    email: user.email,
+    name: user!.name,
+    email: user!.email,
   });
 
   useEffect(() => {
     setValues({
-      name: user.name,
-      email: user.email,
+      name: user!.name,
+      email: user!.email,
       password: "",
     });
   }, [user, setValues]);
 
-  const handleSave = (e) => {
+  const handleSave = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     if (values.name && values.email) {
       dispatch(updateUserProfile(values));
     }
   };
 
-  const handleCancel = () => {
+  const handleCancel = (): void => {
     setValues({
-      name: user.name,
-      email: user.email,
+      name: user!.name,
+      email: user!.email,
       password: "",
     });
   };
 
-  const loggingOut = () => {
+  const loggingOut = (): void => {
     navigate("/login");
     dispatch(logOut());
   };
