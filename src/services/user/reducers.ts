@@ -1,4 +1,4 @@
-import { IUser } from './../../utils/types';
+import { IUser } from "./../../utils/types";
 import {
   SET_AUTH_CHECKED,
   FETCH_REGISTER_REQUEST,

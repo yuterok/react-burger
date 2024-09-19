@@ -1,5 +1,4 @@
 import { useForm } from "../hooks/useForm";
-import { useDispatch } from "react-redux";
 import { fetchRegister } from "../services/user/actions";
 import { isEmailValid } from "../utils/form-validation";
 

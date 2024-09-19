@@ -12,6 +12,7 @@ interface IInput {
   extraClass?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
+
 export const CustomInput: FC<IInput> = ({
   value,
   placeholder,
@@ -31,8 +32,6 @@ export const CustomInput: FC<IInput> = ({
       size={"default"}
       extraClass={extraClass}
       required={true}
-      onPointerEnterCapture={undefined}
-      onPointerLeaveCapture={undefined}
     />
   );
 };
@@ -49,7 +48,6 @@ export const EmailCustomInput: FC<IInput> = ({
         value={value || ""}
         name={"email"}
         isIcon={false}
-        errorText="Введите корректный e-mail"
         extraClass={extraClass}
         required={true}
       />
@@ -69,7 +67,6 @@ export const PasswordCustomInput: FC<IInput> = ({
         value={value || ""}
         name={"password"}
         extraClass={extraClass}
-        error={false}
         required={true}
       />
     </div>
@@ -131,8 +128,6 @@ export const EditNameInput: FC<IInput> = ({ value, onChange }) => {
       onIconClick={onIconClick}
       errorText={"Ошибка"}
       size={"default"}
-      onPointerEnterCapture={undefined}
-      onPointerLeaveCapture={undefined}
     />
   );
 };

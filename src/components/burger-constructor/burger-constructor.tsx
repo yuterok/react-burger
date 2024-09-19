@@ -21,7 +21,7 @@ import OrderDetails from "./order-details/order-details";
 import { Placeholder } from "./constructor-placeholders/constructor-placeholders";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../services/store";
-import { IngredientType, IUser } from "../../utils/types";
+import { IngredientType } from "../../utils/types";
 
 const Cart = () => {
   const { cart, bun } = useAppSelector((state) => state.cart);

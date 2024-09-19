@@ -16,28 +16,17 @@ const TabIngredients: FC<ITabIngredients> = ({ currentTab, setCurrentTab }) => {
   };
   return (
     <div className={styles.tabs}>
-      <Tab
-        id="bun"
-        value="bun"
-        active={currentTab === "bun"}
-        onClick={handleTabClick}
-      >
+      <Tab value="bun" active={currentTab === "bun"} onClick={handleTabClick}>
         Булки
       </Tab>
       <Tab
-        id="sauce"
         value="sauce"
         active={currentTab === "sauce"}
         onClick={handleTabClick}
       >
         Соусы
       </Tab>
-      <Tab
-        id="main"
-        value="main"
-        active={currentTab === "main"}
-        onClick={handleTabClick}
-      >
+      <Tab value="main" active={currentTab === "main"} onClick={handleTabClick}>
         Начинки
       </Tab>
     </div>
