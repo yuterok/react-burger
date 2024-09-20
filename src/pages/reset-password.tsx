@@ -9,7 +9,7 @@ import {
 } from "../components/ui-components/inputs";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import { request } from "../utils/request";
+import { request, getErrorMessage } from "../utils/request";
 
 export const ResetPassword = () => {
   const { values, handleChange } = useForm({ password: "", code: "" });
@@ -27,7 +27,7 @@ export const ResetPassword = () => {
     token: values.code,
   };
 
-  const FetchResetPassword = async (e) => {
+  const FetchResetPassword = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const res = await request("/password-reset/reset", {
@@ -38,7 +38,7 @@ export const ResetPassword = () => {
       localStorage.removeItem("resetPassword");
       navigate("/login", { replace: true });
     } catch (error) {
-      if (error.message === "Invalid credentials provided") {
+      if (getErrorMessage(error) === "Invalid credentials provided") {
         alert("Введены неверные данные");
       }
       console.error("Failed:", error);

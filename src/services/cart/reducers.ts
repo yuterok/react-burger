@@ -1,3 +1,5 @@
+import { IngredientType } from "../../utils/types";
+
 import {
   ADD_INGREDIENT,
   DELETE_INGREDIENT,
@@ -6,12 +8,17 @@ import {
   EMPTY_CART,
 } from "./actions";
 
-const initialState = {
+interface CartState {
+  cart: IngredientType[];
+  bun: IngredientType | null;
+}
+
+const initialState: CartState = {
   cart: [],
   bun: null,
 };
 
-export const cartReducer = (state = initialState, action) => {
+export const cartReducer = (state = initialState, action: any): CartState => {
   switch (action.type) {
     case ADD_INGREDIENT: {
       return {
@@ -34,7 +41,9 @@ export const cartReducer = (state = initialState, action) => {
     case MOVE_INGREDIENT: {
       const { dragIndex, dropIndex } = action.payload;
       const newCart = [...state.cart];
-      newCart.splice(dragIndex, 0, newCart.splice(dropIndex, 1)[0]);
+      // newCart.splice(dragIndex, 0, newCart.splice(dropIndex, 1)[0]);
+      const [movedItem] = newCart.splice(dragIndex, 1);
+      newCart.splice(dropIndex, 0, movedItem);
 
       return {
         ...state,

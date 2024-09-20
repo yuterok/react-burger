@@ -1,6 +1,11 @@
+import { FC } from "react";
 import styles from "./constructor-placeholders.module.css";
 
-export const Placeholder = ({ form }) => {
+interface PlaceholderProps {
+  form: 'top' | 'bottom' | 'ingredient';
+}
+
+export const Placeholder: FC<PlaceholderProps> = ({ form }) => {
   const style = {
     borderRadius:
       form === "top"

@@ -1,8 +1,14 @@
-import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import {
+  Routes,
+  Route,
+  useLocation,
+  useNavigate,
+  Location,
+} from "react-router-dom";
 import { useEffect } from "react";
 import { fetchIngredients } from "../../services/ingredients/actions";
 import { checkUserAuth } from "../../services/user/actions";
+import { useAppDispatch, useAppSelector } from "../../services/store";
 import Modal from "../modal/modal";
 
 import {
@@ -22,11 +28,14 @@ import AppHeader from "../app-header/app-header";
 import IngredientDetails from "../burger-ingredients/ingredient-details/ingredient-details";
 import { OnlyAuth, OnlyUnAuth } from "./protected-route";
 
+interface LocationState {
+  backgroundLocation?: Location;
+}
 function App() {
-  const location = useLocation();
+  const location = useLocation() as Location & { state: LocationState };
   const state = location.state;
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(checkUserAuth());
@@ -36,7 +45,7 @@ function App() {
     dispatch(fetchIngredients());
   }, []);
 
-  const { itemsRequest, itemsFailed, items } = useSelector(
+  const { itemsRequest, itemsFailed, items } = useAppSelector(
     (state) => state.ingredients
   );
 
@@ -44,7 +53,8 @@ function App() {
     navigate(-1);
   };
 
-  const { isAuthChecked } = useSelector((state) => state.user);
+  const { isAuthChecked } = useAppSelector((state) => state.user);
+
   return (
     <div className={styles.app}>
       {itemsRequest || !isAuthChecked ? (

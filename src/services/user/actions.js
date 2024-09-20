@@ -108,7 +108,7 @@ export const fetchRegister = (data) => {
       saveTokens(res.accessToken, res.refreshToken);
     } catch (error) {
       dispatch({ type: FETCH_REGISTER_FAILURE, error: error.message });
-      if (error == "Ошибка 403") {
+      if (error === "Ошибка 403") {
         alert("Пользователь с такими данными уже существует");
       }
       console.error("Registration failed:", error);

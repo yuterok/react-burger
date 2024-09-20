@@ -1,5 +1,4 @@
 import { useForm } from "../hooks/useForm";
-import { useDispatch } from "react-redux";
 import { fetchRegister } from "../services/user/actions";
 import { isEmailValid } from "../utils/form-validation";
 
@@ -12,6 +11,7 @@ import {
   CustomInput,
   PasswordCustomInput,
 } from "../components/ui-components/inputs";
+import { useAppDispatch } from "../services/store";
 
 export const Register = () => {
   const { values, handleChange } = useForm({
@@ -20,7 +20,7 @@ export const Register = () => {
     password: "",
   });
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const data = {
     email: values.email,
@@ -28,7 +28,7 @@ export const Register = () => {
     name: values.name,
   };
 
-  const register = async (e) => {
+  const register = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!isEmailValid(values.email)) {
       return;

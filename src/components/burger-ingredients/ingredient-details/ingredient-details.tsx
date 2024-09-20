@@ -1,12 +1,16 @@
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
 import styles from "./ingredient-details.module.css";
-import { IngredientType } from "../../../utils/types";
+import { useAppSelector } from "../../../services/store";
+import { FC } from "react";
 
-const IngredientDetails = () => {
+const IngredientDetails: FC = () => {
   const id = useParams().id;
-  const { items } = useSelector((state) => state.ingredients);
+  const { items } = useAppSelector((state) => state.ingredients);
   const ingredient = items.find((item) => item._id === id);
+
+  if (!ingredient) {
+    return <p>Ингредиент не найден</p>
+  }
   return (
     <div className={styles.container}>
       <h2 className={styles.title + " text text_type_main-large"}>
@@ -36,10 +40,6 @@ const IngredientDetails = () => {
       </div>
     </div>
   );
-};
-
-IngredientDetails.propTypes = {
-  ingredient: IngredientType,
 };
 
 export default IngredientDetails;

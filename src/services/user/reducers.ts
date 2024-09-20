@@ -1,3 +1,4 @@
+import { IUser } from "./../../utils/types";
 import {
   SET_AUTH_CHECKED,
   FETCH_REGISTER_REQUEST,
@@ -14,7 +15,20 @@ import {
   LOGOUT_FAILURE,
 } from "./actions";
 
-const initialState = {
+interface UserState {
+  user: IUser | null;
+  loginRequest: boolean;
+  loginFailed: boolean;
+  registerRequest: boolean;
+  registerFailed: boolean;
+  isAuthChecked: boolean;
+  profileUpdateRequest: boolean;
+  profileUpdateFailed: boolean;
+  logoutRequest: boolean;
+  logoutFailed: boolean;
+}
+
+const initialState: UserState = {
   user: null,
 
   loginRequest: false,
@@ -32,7 +46,7 @@ const initialState = {
   logoutFailed: false,
 };
 
-export const userReducer = (state = initialState, action) => {
+export const userReducer = (state = initialState, action: any): UserState => {
   switch (action.type) {
     case SET_AUTH_CHECKED:
       return {
