@@ -25,7 +25,7 @@ export const checkSuccess = <T extends ISuccessResponse>(res: T): T => {
 
 export const request = async <T extends ISuccessResponse>(
   endpoint: string,
-  options: RequestInit | undefined
+  options?: RequestInit | undefined
 ): Promise<T> => {
   const response = await fetch(`${BASE_URL}${endpoint}`, options);
   const jsonResponse = await checkResponse(response);
