@@ -6,6 +6,8 @@ import { ResetPassword } from './reset-password';
 import { Profile } from './profile';
 import { IngredientInfo } from './ingredient-info';
 import { Page404 } from './page-404';
+import { Feed } from './feed';
+import { Orders } from './orders';
 
 
-export { HomePage, Login, Register, ForgotPassword, ResetPassword, Profile, IngredientInfo, Page404 };
+export { HomePage, Login, Register, ForgotPassword, ResetPassword, Profile, IngredientInfo, Page404, Feed, Orders };

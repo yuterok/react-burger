@@ -20,6 +20,8 @@ import {
   Profile,
   IngredientInfo,
   Page404,
+  Feed,
+  Orders,
 } from "../../pages";
 
 import styles from "./app.module.css";
@@ -90,6 +92,11 @@ function App() {
               <Route
                 path="/profile"
                 element={<OnlyAuth component={<Profile />} />}
+              />
+              <Route path="/feed" element={<Feed />} />
+              <Route
+                path="/profile/orders"
+                element={<OnlyAuth component={<Orders />} />}
               />
               <Route path="/ingredients/:id" element={<IngredientInfo />} />
               <Route path="/*" element={<Page404 />} />
