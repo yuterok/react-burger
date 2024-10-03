@@ -2,6 +2,7 @@ import {
   FETCH_ORDER_REQUEST,
   FETCH_ORDER_SUCCESS,
   FETCH_ORDER_FAILURE,
+  FetchOrderActions,
 } from "./actions";
 
 interface OrderState {
@@ -16,7 +17,7 @@ const initialState: OrderState = {
   orderInfo: null,
 };
 
-export const orderReducer = (state = initialState, action: any): OrderState => {
+export const orderReducer = (state = initialState, action: FetchOrderActions): OrderState => {
   switch (action.type) {
     case FETCH_ORDER_REQUEST: {
       return {

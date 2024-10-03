@@ -3,6 +3,7 @@ import {
   WS_PROFILE_ORDERS_DISCONNECT,
   WS_PROFILE_ORDERS_MESSAGE,
   WS_PROFILE_ORDERS_ERROR,
+  ProfileOrdersActions,
 } from "./profile-actions";
 
 interface IOrder {
@@ -33,7 +34,7 @@ const initialState: IProfileOrdersState = {
 
 const profileOrdersReducer = (
   state = initialState,
-  action: any
+  action: ProfileOrdersActions
 ): IProfileOrdersState => {
   switch (action.type) {
     case WS_PROFILE_ORDERS_CONNECT_SUCCESS:

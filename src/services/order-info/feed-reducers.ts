@@ -3,6 +3,7 @@ import {
   WS_FEED_DISCONNECT,
   WS_FEED_MESSAGE,
   WS_FEED_ERROR,
+  FeedActions,
 } from "./feed-actions";
 
 interface IOrder {
@@ -31,7 +32,7 @@ const initialState: IFeedState = {
   error: null,
 };
 
-const feedReducer = (state = initialState, action: any): IFeedState => {
+const feedReducer = (state = initialState, action: FeedActions): IFeedState => {
   switch (action.type) {
     case WS_FEED_CONNECT_SUCCESS:
       return {

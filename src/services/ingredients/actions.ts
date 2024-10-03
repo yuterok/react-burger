@@ -11,19 +11,21 @@ interface IFetchIngredientsRequest {
 }
 interface IFetchIngredientsSuccess {
   readonly type: typeof FETCH_INGREDIENTS_SUCCESS;
-  payload: ReadonlyArray<IngredientType>;
+  payload: Array<IngredientType>;
 }
 interface IFetchIngredientsFailure {
   readonly type: typeof FETCH_INGREDIENTS_FAILURE;
-  readonly payload: Error | undefined;
+  payload: Error | undefined;
 }
+
+export type FetchIngredientsActions = IFetchIngredientsRequest | IFetchIngredientsSuccess | IFetchIngredientsFailure;
 
 export const fetchIngredientsRequest = (): IFetchIngredientsRequest => ({
   type: FETCH_INGREDIENTS_REQUEST,
 });
 
 export const fetchIngredientsSuccess = (
-  ingredients: ReadonlyArray<IngredientType>
+  ingredients: Array<IngredientType>
 ): IFetchIngredientsSuccess => ({
   type: FETCH_INGREDIENTS_SUCCESS,
   payload: ingredients,

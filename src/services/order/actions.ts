@@ -16,6 +16,11 @@ interface IFetchOrderFailure {
   payload: Error | undefined;
 }
 
+export type FetchOrderActions =
+  | IFetchOrderRequest
+  | IFetchOrderSuccess
+  | IFetchOrderFailure;
+
 export const fetchOrderRequest = (): IFetchOrderRequest => ({
   type: FETCH_ORDER_REQUEST,
 });

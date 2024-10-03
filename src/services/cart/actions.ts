@@ -29,6 +29,8 @@ export interface IMoveIngredientAction {
   readonly payload: { dragIndex: number; dropIndex: number };
 }
 
+export type CartActions = IAddIngredientAction | IDeleteIngredientAction | IReplaceBunAction | IEmptyCartAction | IMoveIngredientAction;
+
 export const addIngredient = (
   ingredient: IngredientType
 ): IAddIngredientAction => ({

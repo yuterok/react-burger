@@ -27,7 +27,6 @@ const createWebSocketMiddleware = (wsActions: any) => {
       const { type } = action;
 
       if (type === wsActions.wsInit) {
-        const accessToken = localStorage.getItem("accessToken");
         const wsUrl = (action as { payload: string }).payload;
         socket = new WebSocket(wsUrl);
       }
