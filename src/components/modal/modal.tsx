@@ -11,7 +11,7 @@ interface IModal {
   onClose: () => void;
   children?: React.ReactNode;
 }
-const Modal:FC<IModal> = ({ onClose, children }) => {
+const Modal: FC<IModal> = ({ onClose, children }) => {
   const element = useMemo(() => document.createElement("div"), []);
   element.classList.add(styles.modal_wrapper);
 
@@ -40,7 +40,7 @@ const Modal:FC<IModal> = ({ onClose, children }) => {
   return createPortal(
     <>
       <div className={styles.content} onClick={(e) => e.stopPropagation()}>
-        <button onClick={handleClick}>
+        <button className={styles.close_button} onClick={handleClick}>
           <CloseIcon type="primary" />
         </button>
         {children}
@@ -50,6 +50,5 @@ const Modal:FC<IModal> = ({ onClose, children }) => {
     element
   );
 };
-
 
 export default Modal;

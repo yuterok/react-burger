@@ -22,6 +22,7 @@ import {
   Page404,
   Feed,
   Orders,
+  OrderInfo,
 } from "../../pages";
 
 import styles from "./app.module.css";
@@ -29,6 +30,7 @@ import styles from "./app.module.css";
 import AppHeader from "../app-header/app-header";
 import IngredientDetails from "../burger-ingredients/ingredient-details/ingredient-details";
 import { OnlyAuth, OnlyUnAuth } from "./protected-route";
+import { OrderDetails } from "../orders/order-details";
 
 interface LocationState {
   backgroundLocation?: Location;
@@ -99,6 +101,8 @@ function App() {
                 element={<OnlyAuth component={<Orders />} />}
               />
               <Route path="/ingredients/:id" element={<IngredientInfo />} />
+              <Route path="/feed/:id" element={<OrderInfo />} />
+              <Route path="/profile/orders/:id" element={<OrderInfo />} />
               <Route path="/*" element={<Page404 />} />
             </Routes>
 
@@ -109,6 +113,22 @@ function App() {
                   element={
                     <Modal onClose={closeModal}>
                       <IngredientDetails />
+                    </Modal>
+                  }
+                />
+                <Route
+                  path="/profile/orders/:id"
+                  element={
+                    <Modal onClose={closeModal}>
+                      <OrderDetails />
+                    </Modal>
+                  }
+                />
+                <Route
+                  path="/feed/:id"
+                  element={
+                    <Modal onClose={closeModal}>
+                      <OrderDetails />
                     </Modal>
                   }
                 />

@@ -166,11 +166,11 @@ const Total: FC = () => {
     return sum;
   };
 
-  const ingredients: string[] = cart.map(function (item) {
+  let ingredients = cart.map(function (item) {
     return item._id;
   });
 
-  const orderIngredientsIDs: { ingredients: string[] } = { ingredients };
+  const orderIngredientsIDs = { ingredients };
 
   const orderProcess = (): void => {
     if (!user) {
@@ -178,6 +178,8 @@ const Total: FC = () => {
     } else {
       openModal();
       if (cart.length > 0) {
+        orderIngredientsIDs.ingredients.unshift(bun?._id!);
+        orderIngredientsIDs.ingredients.push(bun?._id!);
         dispatch(fetchOrder(orderIngredientsIDs));
       }
     }

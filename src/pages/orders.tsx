@@ -1,10 +1,14 @@
-import { useEffect, FC } from "react";
+import { FC, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { logOut } from "../services/user/actions";
-import { FormattedDate } from "@ya.praktikum/react-developer-burger-ui-components";
-import styles from "./profile.module.css";
+import styles from "./orders.module.css";
 import { useAppDispatch, useAppSelector } from "../services/store";
+import {
+  connectProfileOrders,
+  disconnectProfileOrders,
+} from "../services/order-info/profile-actions";
+import { OrdersList } from "../components/orders/orders-list/orders-list";
 
 export const Orders: FC = () => {
   const nav_link_style: string = `${styles.link} text text_type_main-medium`;
@@ -13,13 +17,19 @@ export const Orders: FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken")?.split("Bearer ")[1]!;
+    dispatch(connectProfileOrders(token));
 
+    return () => {
+      dispatch(disconnectProfileOrders());
+    };
+  }, [dispatch]);
+  const { userOrders } = useAppSelector((state) => state.orderProfile);
   const loggingOut = (): void => {
     navigate("/login");
     dispatch(logOut());
   };
-
-
 
   return (
     <div className={styles.container}>
@@ -50,9 +60,17 @@ export const Orders: FC = () => {
         <p className="text text_type_main-default text_color_inactive mt-25">
           В этом разделе вы можете просмотреть свою историю заказов
         </p>
-
       </div>
-      <div className={styles.info}></div>
+      <div className={styles.orders_list}>
+        {userOrders.length < 1 ? (
+          <p>
+            Заказов пока нет. Скорее заказывайте самые вкусные космические
+            бургеры!!
+          </p>
+        ) : (
+          <OrdersList />
+        )}
+      </div>
     </div>
   );
 };
