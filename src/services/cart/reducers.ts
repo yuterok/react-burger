@@ -6,6 +6,7 @@ import {
   REPLACE_BUN,
   MOVE_INGREDIENT,
   EMPTY_CART,
+  CartActions,
 } from "./actions";
 
 interface CartState {
@@ -18,7 +19,7 @@ const initialState: CartState = {
   bun: null,
 };
 
-export const cartReducer = (state = initialState, action: any): CartState => {
+export const cartReducer = (state = initialState, action: CartActions): CartState => {
   switch (action.type) {
     case ADD_INGREDIENT: {
       return {

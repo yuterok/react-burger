@@ -43,7 +43,7 @@ const AppHeader: FC = () => {
           <div className={styles.nav_section}>
             <CustomNavLink link="/" text="Конструктор" Icon={BurgerIcon} />
             <CustomNavLink
-              link="/profile/orders"
+              link="/feed"
               text="Лента заказов"
               Icon={ListIcon}
             />

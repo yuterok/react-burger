@@ -1,4 +1,5 @@
 import { request, fetchWithRefresh, saveTokens } from "../../utils/request";
+import { AppDispatch } from "../store";
 
 export const SET_AUTH_CHECKED = "SET_AUTH_CHECKED";
 
@@ -20,36 +21,70 @@ export const LOGOUT_FAILURE = "LOGOUT_FAILURE";
 
 export const LOGOUT = "LOGOUT";
 
-export const fetchRegisterRequest = () => ({
+interface ISetAuthChecked {
+  type: typeof SET_AUTH_CHECKED;
+  payload: boolean;
+}
+
+export const setAuthChecked = (value: boolean): ISetAuthChecked => ({
+  type: SET_AUTH_CHECKED,
+  payload: value,
+});
+
+interface IFetchRegisterRequest {
+  type: typeof FETCH_REGISTER_REQUEST;
+}
+interface IFetchRegisterSuccess {
+  type: typeof FETCH_REGISTER_SUCCESS;
+  payload: object;
+}
+interface IFetchRegisterFailure {
+  type: typeof FETCH_REGISTER_FAILURE;
+  payload: Error;
+}
+
+export const fetchRegisterRequest = (): IFetchRegisterRequest => ({
   type: FETCH_REGISTER_REQUEST,
 });
 
-export const fetchRegisterSuccess = (info) => ({
+export const fetchRegisterSuccess = (info: object): IFetchRegisterSuccess => ({
   type: FETCH_REGISTER_SUCCESS,
   payload: info,
 });
 
-export const fetchRegisterFailure = (error) => ({
+export const fetchRegisterFailure = (error: Error): IFetchRegisterFailure => ({
   type: FETCH_REGISTER_FAILURE,
   payload: error,
 });
 
-export const fetchLoginRequest = () => ({
+interface IFetchLoginRequest {
+  type: typeof FETCH_LOGIN_REQUEST;
+}
+interface IFetchLoginSuccess {
+  type: typeof FETCH_LOGIN_SUCCESS;
+  payload: object;
+}
+interface IFetchLoginFailure {
+  type: typeof FETCH_LOGIN_FAILURE;
+  payload: Error;
+}
+
+export const fetchLoginRequest = (): IFetchLoginRequest => ({
   type: FETCH_LOGIN_REQUEST,
 });
 
-export const fetchLoginSuccess = (info) => ({
+export const fetchLoginSuccess = (info: object): IFetchLoginSuccess => ({
   type: FETCH_LOGIN_SUCCESS,
   payload: info,
 });
 
-export const fetchLoginFailure = (error) => ({
+export const fetchLoginFailure = (error: Error): IFetchLoginFailure => ({
   type: FETCH_LOGIN_FAILURE,
   payload: error,
 });
 
 export const logOut = () => {
-  return async (dispatch) => {
+  return async (dispatch: AppDispatch) => {
     dispatch({ type: LOGOUT_REQUEST });
     try {
       const refreshToken = localStorage.getItem("refreshToken");
@@ -66,34 +101,45 @@ export const logOut = () => {
       localStorage.removeItem("refreshToken");
       dispatch({ type: LOGOUT_SUCCESS });
       console.log(res);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Ошибка при выходе из системы:", error);
       dispatch({ type: LOGOUT_FAILURE });
     }
   };
 };
 
-export const setAuthChecked = (value) => ({
-  type: SET_AUTH_CHECKED,
-  payload: value,
-});
+interface IUpdateProfileRequest {
+  type: typeof UPDATE_PROFILE_REQUEST;
+}
+interface IUpdateProfileSuccess {
+  type: typeof UPDATE_PROFILE_SUCCESS;
+  payload: object;
+}
+interface IUpdateProfileFailure {
+  type: typeof UPDATE_PROFILE_FAILURE;
+  payload: Error;
+}
 
-export const updateProfileRequest = () => ({
+export const updateProfileRequest = (): IUpdateProfileRequest => ({
   type: UPDATE_PROFILE_REQUEST,
 });
 
-export const updateProfileSuccess = (info) => ({
+export const updateProfileSuccess = (info: object): IUpdateProfileSuccess => ({
   type: UPDATE_PROFILE_SUCCESS,
   payload: info,
 });
 
-export const updateProfileFailure = (error) => ({
+export const updateProfileFailure = (error: Error): IUpdateProfileFailure => ({
   type: UPDATE_PROFILE_FAILURE,
   payload: error,
 });
 
-export const fetchRegister = (data) => {
-  return async (dispatch) => {
+export const fetchRegister = (data: {
+  email: string;
+  password: string;
+  name: string;
+}) => {
+  return async (dispatch: AppDispatch) => {
     dispatch({ type: FETCH_REGISTER_REQUEST });
     try {
       const res = await request("/auth/register", {
@@ -106,7 +152,7 @@ export const fetchRegister = (data) => {
       dispatch({ type: FETCH_REGISTER_SUCCESS, payload: res });
       console.log("Registration successful:", res);
       saveTokens(res.accessToken, res.refreshToken);
-    } catch (error) {
+    } catch (error: any) {
       dispatch({ type: FETCH_REGISTER_FAILURE, error: error.message });
       if (error === "Ошибка 403") {
         alert("Пользователь с такими данными уже существует");
@@ -116,8 +162,8 @@ export const fetchRegister = (data) => {
   };
 };
 
-export const fetchLogin = (data) => {
-  return async (dispatch) => {
+export const fetchLogin = (data: { email: string; password: string }) => {
+  return async (dispatch: AppDispatch) => {
     dispatch({ type: FETCH_LOGIN_REQUEST });
     try {
       const res = await request("/auth/login", {
@@ -130,7 +176,7 @@ export const fetchLogin = (data) => {
       dispatch({ type: FETCH_LOGIN_SUCCESS, payload: res });
       console.log(res);
       saveTokens(res.accessToken, res.refreshToken);
-    } catch (error) {
+    } catch (error: any) {
       dispatch({ type: FETCH_LOGIN_FAILURE, error: error.message });
       console.log("Login error: ", error);
     }
@@ -138,7 +184,7 @@ export const fetchLogin = (data) => {
 };
 
 export const checkUserAuth = () => {
-  return async (dispatch) => {
+  return async (dispatch: AppDispatch) => {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
       try {
@@ -150,7 +196,7 @@ export const checkUserAuth = () => {
         });
         dispatch(fetchLoginSuccess(res));
         dispatch(setAuthChecked(true));
-      } catch (err) {
+      } catch (err: any) {
         console.log("Ошибка проверки токена", err);
         dispatch(logOut());
       }
@@ -160,21 +206,22 @@ export const checkUserAuth = () => {
   };
 };
 
-export const updateUserProfile = (data) => {
-  return async (dispatch) => {
+export const updateUserProfile = (data: { name?: string; email?: string }) => {
+  return async (dispatch: AppDispatch) => {
     dispatch(updateProfileRequest());
     try {
+      const token = localStorage.getItem("accessToken");
       const res = await fetchWithRefresh("/auth/user", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          Authorization: localStorage.getItem("accessToken"),
+          ...(token && { Authorization: token }),
         },
         body: JSON.stringify(data),
       });
       dispatch(updateProfileSuccess(res.user));
       console.log(res);
-    } catch (error) {
+    } catch (error: any) {
       dispatch(updateProfileFailure(error.message));
     }
   };

@@ -71,6 +71,7 @@ export const Profile: FC = () => {
               isActive ? `${nav_link_style_active}` : `${nav_link_style}`
             }
             to="/profile/orders"
+            end
           >
             История заказов
           </NavLink>

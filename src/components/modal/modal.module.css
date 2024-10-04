@@ -23,13 +23,14 @@
   z-index: 1000;
 }
 
-.content svg {
+.close_button svg {
   position: absolute;
   top: 50px;
   right: 0;
   margin-right: 40px;
 }
-.content button {
+
+.close_button {
   border: none;
   cursor: pointer;
 }
