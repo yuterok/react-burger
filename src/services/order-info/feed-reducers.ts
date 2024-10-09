@@ -24,7 +24,7 @@ interface IFeedState {
   error: any;
 }
 
-const initialState: IFeedState = {
+export const initialState: IFeedState = {
   orders: [],
   total: 0,
   totalToday: 0,

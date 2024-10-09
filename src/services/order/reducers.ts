@@ -11,13 +11,13 @@ interface OrderState {
   orderInfo: any;
 };
 
-const initialState: OrderState = {
+export const initialState: OrderState = {
   orderRequest: false,
   orderFailed: false,
   orderInfo: null,
 };
 
-export const orderReducer = (state = initialState, action: FetchOrderActions): OrderState => {
+const orderReducer = (state = initialState, action: FetchOrderActions): OrderState => {
   switch (action.type) {
     case FETCH_ORDER_REQUEST: {
       return {

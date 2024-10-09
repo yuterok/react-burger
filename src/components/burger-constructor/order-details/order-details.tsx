@@ -10,7 +10,7 @@ const OrderDetails: FC = () => {
   );
   const { cart } = useAppSelector((state) => state.cart);
   return (
-    <div className={styles.container}>
+    <div data-cy="order-details" className={styles.container}>
       {cart.length === 0 ? (
         <h1 className={`${styles.warning} text text_type_main-large mt-10`}>
           Заказ пуст. Добавьте ингредиенты

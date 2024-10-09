@@ -42,9 +42,14 @@ const Cart = () => {
   };
 
   return (
-    <div ref={dropRef} className={styles.cart_container + " mt-25 mb-10"}>
+    <div
+      data-cy="burger-constructor"
+      ref={dropRef}
+      className={styles.cart_container + " mt-25 mb-10"}
+    >
       {bun ? (
         <ConstructorElement
+          data-cy="constructor-ingredient"
           type="top"
           isLocked={true}
           text={bun.name + " (верх)"}
@@ -135,6 +140,7 @@ const CartIngredientItem: FC<ICartIngredientItem> = ({
       ref={ref}
       style={{ opacity: opacity }}
       className={styles.cart_ingredient_item}
+      data-cy="constructor-ingredient"
     >
       <DragIcon type="primary" />
       <ConstructorElement
@@ -205,6 +211,7 @@ const Total: FC = () => {
           type="primary"
           size="medium"
           extraClass="ml-2"
+          data-cy="makeOrder"
         >
           Оформить заказ
         </Button>
