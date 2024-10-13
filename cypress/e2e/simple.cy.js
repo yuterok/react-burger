@@ -2,6 +2,7 @@ const selectors = {
   ingredient: '[data-cy="ingredient"]',
   constructor: '[data-cy="burger-constructor"]',
   modal: '[data-cy="modal"]',
+  makeOrder: '[data-cy="makeOrder"]',
 };
 
 describe("testing Burger Constructor", () => {
@@ -11,6 +12,8 @@ describe("testing Burger Constructor", () => {
     cy.visit("/login");
     cy.get("[type=email]").type(`${email}{enter}`);
     cy.get("[type=password]").type(`${password}{enter}`);
+    cy.window().its("localStorage.accessToken").should("exist");
+    cy.url().should("include", "/");
   });
 
   it("should drag an ingredient into constructor", () => {
@@ -26,9 +29,9 @@ describe("testing Burger Constructor", () => {
     cy.get(selectors.ingredient).contains("булка").trigger("dragstart");
     cy.get(selectors.constructor).trigger("drop");
     cy.get(selectors.ingredient).contains("Соус").trigger("dragstart");
-    cy.get(selectors.constructor).trigger("drop");
-    cy.get('[data-cy="makeOrder"]').click();
-    cy.get(selectors.modal, { timeout: 5000 }).should("be.visible");
+    cy.get(selectors.constructor, { timeout: 5000 }).trigger("drop");
+    cy.get(selectors.makeOrder).click();
+    cy.get(selectors.modal, { timeout: 20000 }).should("be.visible");
     cy.get('[data-cy="order-details"]', { timeout: 20000 }).should(
       "contain.text",
       "идентификатор заказа"
