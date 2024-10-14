@@ -69,6 +69,7 @@ const IngredientItem: FC<IngredientType> = (ingredient) => {
       className={styles.ingredient_block + " pl-4"}
       style={{ opacity: opacity }}
       state={{ backgroundLocation: location }}
+      data-cy="ingredient"
     >
       {countIngredients(ingredient) > 0 ? (
         <Counter

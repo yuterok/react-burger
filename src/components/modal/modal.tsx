@@ -39,8 +39,16 @@ const Modal: FC<IModal> = ({ onClose, children }) => {
 
   return createPortal(
     <>
-      <div className={styles.content} onClick={(e) => e.stopPropagation()}>
-        <button className={styles.close_button} onClick={handleClick}>
+      <div
+        data-cy="modal"
+        className={styles.content}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          data-cy="close-modal"
+          className={styles.close_button}
+          onClick={handleClick}
+        >
           <CloseIcon type="primary" />
         </button>
         {children}

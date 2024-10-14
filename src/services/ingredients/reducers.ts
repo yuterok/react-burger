@@ -7,7 +7,7 @@ interface IngredientsState {
     itemsRequest: boolean;
     itemsFailed: boolean;
 }
-const initialState: IngredientsState = {
+export const initialState: IngredientsState = {
     items: [],
     itemsRequest: false,
     itemsFailed: false

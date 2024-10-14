@@ -28,7 +28,7 @@ interface UserState {
   logoutFailed: boolean;
 }
 
-const initialState: UserState = {
+export const initialState: UserState = {
   user: null,
 
   loginRequest: false,

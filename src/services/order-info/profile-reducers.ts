@@ -24,7 +24,7 @@ interface IProfileOrdersState {
   error: any;
 }
 
-const initialState: IProfileOrdersState = {
+export const initialState: IProfileOrdersState = {
   userOrders: [],
   total: 0,
   totalToday: 0,
